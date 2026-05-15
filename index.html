@@ -164,14 +164,14 @@ body::before{
   display:flex;align-items:center;
   padding:120px var(--hpad) 80px;
 }
-.hero__bg{position:absolute;inset:0;opacity:.55;background:
-  radial-gradient(ellipse at 30% 30%,rgba(192,104,73,.25),transparent 50%),
-  radial-gradient(ellipse at 75% 70%,rgba(107,34,48,.35),transparent 55%),
-  linear-gradient(135deg,#4a2620 0%,#2A1812 60%,#1A0F0B 100%);
+.hero__bg{position:absolute;inset:0;opacity:.72;background:
+  radial-gradient(ellipse at 30% 30%,rgba(192,104,73,.28),transparent 50%),
+  radial-gradient(ellipse at 75% 70%,rgba(107,34,48,.4),transparent 55%),
+  linear-gradient(135deg,#5a2c25 0%,#3D1F1B 60%,#1A0F0B 100%);
 }
 .hero__bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform 12s linear,opacity .8s var(--ease)}
 .hero.in .hero__bg img{transform:scale(1.15)}
-.hero__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,15,11,.35) 0%,rgba(26,15,11,.55) 60%,var(--espresso) 100%),radial-gradient(ellipse at 70% 20%,transparent,rgba(42,24,18,.7))}
+.hero__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,15,11,.25) 0%,rgba(26,15,11,.4) 55%,rgba(42,24,18,.85) 100%),radial-gradient(ellipse at 70% 20%,transparent,rgba(42,24,18,.55))}
 .hero__inner{position:relative;width:100%;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:40px}
 .hero__eyebrow{font-family:'Tajawal',sans-serif;display:inline-flex;align-items:center;gap:14px;color:var(--gold-2);font-size:13px;letter-spacing:.4em;text-transform:uppercase}
 .hero__eyebrow::before{content:"";width:42px;height:1px;background:var(--gold-2)}
@@ -521,6 +521,30 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
   .tile--tall{grid-column:span 1;grid-row:span 2}
 }
 
+/* ===== Card / tile image fallback (when an Unsplash photo 404s) ===== */
+.card__media.no-img,
+.tile.no-img,
+.sig-slide__media.no-img{
+  background:
+    radial-gradient(circle at 28% 24%,rgba(201,169,97,.18),transparent 50%),
+    radial-gradient(circle at 75% 75%,rgba(140,46,63,.25),transparent 55%),
+    linear-gradient(135deg,#6B2230 0%,#3D1F1B 55%,#2A1812 100%) !important;
+}
+.media-fallback{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:18px;pointer-events:none;color:var(--cream);
+}
+.media-fallback .glyph{
+  font-family:'Playfair Display',serif;font-style:italic;font-weight:500;
+  font-size:clamp(90px,18vw,180px);line-height:1;color:rgba(244,234,213,.16);letter-spacing:-.04em;
+}
+.media-fallback .crest{
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+  color:rgba(244,234,213,.65);font-size:16px;margin-top:6px;letter-spacing:.05em;max-width:80%;
+}
+.media-fallback .bar{width:34px;height:1px;background:var(--gold-2);margin:14px auto 0;opacity:.7}
+.media-fallback .stamp{font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.45em;color:var(--gold-2);margin-top:8px;text-transform:uppercase;opacity:.7}
+
 /* Back to top */
 .totop{position:fixed;right:24px;bottom:24px;width:48px;height:48px;border-radius:50%;background:var(--espresso);color:var(--cream);display:inline-flex;align-items:center;justify-content:center;z-index:150;opacity:0;pointer-events:none;transition:opacity .4s var(--ease),transform .4s var(--ease);transform:translateY(20px)}
 .totop.show{opacity:1;pointer-events:auto;transform:translateY(0)}
@@ -533,9 +557,16 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
 /* utility */
 .mt-12{margin-top:12px}.center{text-align:center}
 @media(max-width:600px){
-  .hero__meta{flex-wrap:wrap;gap:18px;font-size:10px}
+  .hero{padding:100px var(--hpad) 110px;min-height:92vh}
+  .hero__title{font-size:clamp(46px,11vw,84px);line-height:1}
+  .hero__title .ar{font-size:.34em;letter-spacing:.12em}
+  .hero__lede{font-size:14px}
+  .hero__meta{flex-wrap:wrap;gap:14px;font-size:9px;left:var(--hpad);right:var(--hpad);bottom:24px}
+  .hero__meta b{font-size:15px}
   .hero__scroll{display:none}
   .menu-head{flex-direction:column;align-items:flex-start}
+  .nav__logo{font-size:22px}
+  .nav__logo small{display:none}
 }
 </style>
 </head>
@@ -887,14 +918,14 @@ const MENU=[
  {cat:'bakery',name:'Focaccia',ar:'فوكاتشيا',price:18,cal:320,desc:'Italian bread, olive oil, rosemary, oregano, salty cheese.',img:'https://images.unsplash.com/photo-1568471173242-461f0a730452?auto=format&fit=crop&w=900&q=80'},
 
  // BREAD / SANDWICHES
- {cat:'bread',name:'Turkey Ciabatta',ar:'تشاباتا الحبش',price:27,cal:590,desc:'Fresh ciabatta with smoked turkey & cheese.',img:'https://images.unsplash.com/photo-1539252554935-80c8cabbe26b?auto=format&fit=crop&w=900&q=80'},
- {cat:'bread',name:'Spicy Tuna',ar:'تونة حارة',price:35,cal:560,desc:'Tuna folded into a zesty spicy sauce.',img:'https://images.unsplash.com/photo-1521305916504-4a1121188589?auto=format&fit=crop&w=900&q=80'},
- {cat:'bread',name:'Mozzarella Baguette',ar:'باغيت موزاريلا',price:23,cal:320,desc:'Fresh mozzarella in a crisp baguette.',img:'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bread',name:'Turkey Ciabatta',ar:'تشاباتا الحبش',price:27,cal:590,desc:'Fresh ciabatta with smoked turkey & cheese.',img:'https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bread',name:'Spicy Tuna',ar:'تونة حارة',price:35,cal:560,desc:'Tuna folded into a zesty spicy sauce.',img:'https://images.unsplash.com/photo-1626078297207-eba775eeac99?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bread',name:'Mozzarella Baguette',ar:'باغيت موزاريلا',price:23,cal:320,desc:'Fresh mozzarella in a crisp baguette.',img:'https://images.unsplash.com/photo-1481070414801-51fd732d7184?auto=format&fit=crop&w=900&q=80'},
  {cat:'bread',name:'Sourdough Bread',ar:'خبز الكاسرة',price:33,cal:980,desc:'Artisan loaf crafted through 48-hour natural fermentation.',img:'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=900&q=80',tag:'48hr'},
- {cat:'bread',name:'Smoked Turkey Baguette',ar:'باغيت الحبش المدخن',price:22,cal:320,desc:'Crisp baguette layered with smoked turkey.',img:'https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bread',name:'Smoked Turkey Baguette',ar:'باغيت الحبش المدخن',price:22,cal:320,desc:'Crisp baguette layered with smoked turkey.',img:'https://images.unsplash.com/photo-1539252554935-80c8cabbe26b?auto=format&fit=crop&w=900&q=80'},
  {cat:'bread',name:'Focaccia Burrata',ar:'فوكاتشيا بوراتا',price:30,cal:520,desc:'Pillowy focaccia with a creamy burrata centre.',img:'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=80'},
- {cat:'bread',name:'Ciabatta Chicken Pesto',ar:'تشاباتا دجاج بيستو',price:33,cal:620,desc:'Grilled chicken & basil pesto on toasted ciabatta.',img:'https://images.unsplash.com/photo-1481070414801-51fd732d7184?auto=format&fit=crop&w=900&q=80'},
- {cat:'bread',name:'Ciabatta Halloumi',ar:'تشاباتا الحلوم',price:23,cal:686,desc:'Pan-seared halloumi tucked into warm ciabatta.',img:'https://images.unsplash.com/photo-1626078297207-eba775eeac99?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bread',name:'Ciabatta Chicken Pesto',ar:'تشاباتا دجاج بيستو',price:33,cal:620,desc:'Grilled chicken & basil pesto on toasted ciabatta.',img:'https://images.unsplash.com/photo-1521305916504-4a1121188589?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bread',name:'Ciabatta Halloumi',ar:'تشاباتا الحلوم',price:23,cal:686,desc:'Pan-seared halloumi tucked into warm ciabatta.',img:'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=80'},
 
  // DESSERTS
  {cat:'desserts',name:'Lucia French Toast',ar:'فرنش توست لوتشيا',price:38,cal:625,desc:'Caramel cream, blueberries, raspberries — our signature.',img:'https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=900&q=80',tag:'Signature'},
@@ -949,6 +980,28 @@ const REVIEWS=[
 ];
 
 /* =========================================================
+   Image fallback — runs when an Unsplash photo 404s.
+   Replaces the failed <img> with an on-brand placeholder
+   showing the dish's first letter + name in italic.
+========================================================= */
+window.mediaFallback=function(img,name){
+  img.onerror=null;
+  const p=img.parentElement;
+  if(!p) return;
+  img.remove();
+  p.classList.add('no-img');
+  const initial=(name||'L').trim().charAt(0).toUpperCase();
+  const f=document.createElement('div');
+  f.className='media-fallback';
+  f.innerHTML=`
+    <div class="glyph">${initial}</div>
+    <div class="bar"></div>
+    <div class="crest">${name||'Lucia'}</div>
+    <div class="stamp">Lucia · Riyadh</div>`;
+  p.appendChild(f);
+};
+
+/* =========================================================
    Signatures carousel data
 ========================================================= */
 const SIGNATURES=[
@@ -988,7 +1041,7 @@ SIGNATURES.forEach((s,i)=>{
   slide.className='sig-slide'+(i===0?' active':'');
   slide.innerHTML=`
     <div class="sig-slide__media">
-      <img src="${s.img}" alt="${s.name}" onerror="this.parentElement.style.background='linear-gradient(135deg,var(--burgundy),var(--espresso))'"/>
+      <img src="${s.img}" alt="${s.name}" onerror="mediaFallback(this,'${s.name.replace(/'/g,"\\'")}')"/>
     </div>
     <div class="sig-slide__body">
       <div class="sig-slide__num">0${i+1}</div>
@@ -1053,10 +1106,11 @@ function buildMenu(cat='all',animate=false){
       const hidden=!expanded && i>=INITIAL;
       if(hidden) card.classList.add('is-hidden');
       card.style.animationDelay=`${Math.min(i,11)*60}ms`;
+      const safeName=m.name.replace(/'/g,"\\'");
       card.innerHTML=`
         <div class="card__media">
           ${m.tag?`<span class="card__tag">${m.tag}</span>`:''}
-          <img loading="lazy" src="${m.img}" alt="${m.name}" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,var(--burgundy),var(--espresso))'"/>
+          <img loading="lazy" src="${m.img}" alt="${m.name}" onerror="mediaFallback(this,'${safeName}')"/>
           <div class="card__price">${m.price}<small>SR</small></div>
         </div>
         <div class="card__body">
@@ -1173,7 +1227,7 @@ const gallery=document.getElementById('gallery');
 gallery.querySelectorAll('.tile').forEach((tile,i)=>{
   const img=document.createElement('img');
   img.loading='lazy';img.alt=tile.dataset.cap||'';img.src=tile.dataset.img;
-  img.onerror=()=>{tile.style.background='linear-gradient(135deg,var(--burgundy),var(--espresso))';img.remove()};
+  img.onerror=()=>mediaFallback(img,tile.dataset.cap||'Lucia');
   tile.appendChild(img);
   const cap=document.createElement('div');cap.className='tile__cap';cap.textContent=tile.dataset.cap||'';
   tile.appendChild(cap);

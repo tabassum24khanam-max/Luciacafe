@@ -164,8 +164,12 @@ body::before{
   display:flex;align-items:center;
   padding:120px var(--hpad) 80px;
 }
-.hero__bg{position:absolute;inset:0;opacity:.55}
-.hero__bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform 12s linear}
+.hero__bg{position:absolute;inset:0;opacity:.55;background:
+  radial-gradient(ellipse at 30% 30%,rgba(192,104,73,.25),transparent 50%),
+  radial-gradient(ellipse at 75% 70%,rgba(107,34,48,.35),transparent 55%),
+  linear-gradient(135deg,#4a2620 0%,#2A1812 60%,#1A0F0B 100%);
+}
+.hero__bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform 12s linear,opacity .8s var(--ease)}
 .hero.in .hero__bg img{transform:scale(1.15)}
 .hero__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,15,11,.35) 0%,rgba(26,15,11,.55) 60%,var(--espresso) 100%),radial-gradient(ellipse at 70% 20%,transparent,rgba(42,24,18,.7))}
 .hero__inner{position:relative;width:100%;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:40px}
@@ -208,6 +212,18 @@ body::before{
   0%{transform:translate3d(0,110vh,0) rotate(0)}
   100%{transform:translate3d(20vw,-15vh,0) rotate(720deg)}
 }
+
+/* Hero text animates on load — independent of scroll/JS */
+.hero__eyebrow,.hero__title,.hero__lede,.hero__row,.hero__meta,.hero__scroll{
+  animation:heroIn 1.1s var(--ease-out) both;
+}
+.hero__eyebrow{animation-delay:.15s}
+.hero__title{animation-delay:.3s;animation-duration:1.3s}
+.hero__lede{animation-delay:.55s}
+.hero__row{animation-delay:.75s}
+.hero__meta{animation-delay:.9s}
+.hero__scroll{animation-delay:1s}
+@keyframes heroIn{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
 
 /* ===== Marquee ===== */
 .marquee{background:var(--espresso);color:var(--cream);border-top:1px solid rgba(244,234,213,.06);border-bottom:1px solid rgba(244,234,213,.06);overflow:hidden;padding:22px 0}
@@ -452,6 +468,59 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
 .view-more.open .icn{transform:rotate(180deg)}
 .view-more .count{opacity:.55;font-size:10px;letter-spacing:.25em}
 
+/* ===== Captured / Instagram gallery ===== */
+.captured-head{max-width:1280px;margin:0 auto 50px;display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:end}
+.captured-head .lede{margin:0}
+.captured-cta{display:inline-flex;align-items:center;gap:14px;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--burgundy);font-weight:500;margin-top:18px;border-bottom:1px solid var(--burgundy);padding-bottom:8px;transition:gap .35s var(--ease)}
+.captured-cta:hover{gap:22px}
+.captured-cta svg{transition:transform .4s var(--ease)}
+.captured-cta:hover svg{transform:translateX(4px)}
+
+.gallery{
+  max-width:1400px;margin:0 auto;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  grid-auto-rows:180px;gap:14px;
+}
+.tile{
+  position:relative;overflow:hidden;border-radius:6px;cursor:pointer;
+  background:var(--oat);
+  transform:translateY(20px);opacity:0;
+  transition:transform .9s var(--ease-out),opacity .9s var(--ease-out);
+}
+.tile.in{transform:translateY(0);opacity:1}
+.tile img{width:100%;height:100%;object-fit:cover;transition:transform 1.3s var(--ease-out),filter .6s var(--ease)}
+.tile:hover img{transform:scale(1.08)}
+.tile::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg,transparent 45%,rgba(26,15,11,.7));
+  opacity:0;transition:opacity .45s var(--ease);pointer-events:none;
+}
+.tile:hover::after{opacity:1}
+.tile__cap{
+  position:absolute;left:18px;right:18px;bottom:16px;color:var(--cream);
+  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;line-height:1.2;
+  opacity:0;transform:translateY(10px);transition:all .45s var(--ease);z-index:2;
+}
+.tile:hover .tile__cap{opacity:1;transform:translateY(0)}
+.tile__like{
+  position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;
+  background:rgba(244,234,213,.18);backdrop-filter:blur(8px);
+  color:var(--cream);display:inline-flex;align-items:center;justify-content:center;
+  opacity:0;transform:scale(.8);transition:all .4s var(--ease);z-index:2;
+}
+.tile:hover .tile__like{opacity:1;transform:scale(1)}
+.tile__like.liked{background:var(--burgundy);color:var(--cream)}
+.tile--big{grid-column:span 2;grid-row:span 2}
+.tile--wide{grid-column:span 2}
+.tile--tall{grid-row:span 2}
+@media(max-width:880px){
+  .captured-head{grid-template-columns:1fr;align-items:flex-start}
+  .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:170px}
+  .tile--big{grid-column:span 2;grid-row:span 2}
+  .tile--wide{grid-column:span 2;grid-row:span 1}
+  .tile--tall{grid-column:span 1;grid-row:span 2}
+}
+
 /* Back to top */
 .totop{position:fixed;right:24px;bottom:24px;width:48px;height:48px;border-radius:50%;background:var(--espresso);color:var(--cream);display:inline-flex;align-items:center;justify-content:center;z-index:150;opacity:0;pointer-events:none;transition:opacity .4s var(--ease),transform .4s var(--ease);transform:translateY(20px)}
 .totop.show{opacity:1;pointer-events:auto;transform:translateY(0)}
@@ -526,16 +595,16 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
     <span class="bean" style="left:86%;animation-delay:-8s"></span>
   </div>
   <div class="hero__inner">
-    <div class="hero__eyebrow reveal">Italian Café · Bakery · Specialty Coffee</div>
-    <h1 class="hero__title reveal delay-1">
+    <div class="hero__eyebrow">Italian Café · Bakery · Specialty Coffee</div>
+    <h1 class="hero__title">
       Slow Mornings,<br/>Made <span class="it">Beautifully</span>.
       <span class="ar">صباحٌ هادئ، صُنع بأناقة</span>
     </h1>
-    <p class="hero__lede reveal delay-2">
+    <p class="hero__lede">
       Tucked along Khurais Road in Al Rawdah, Lucia is a quiet love letter to Italian craft —
       sourdough fermented for days, drip coffee roasted with intention, and pastries pulled fresh from the oven each morning.
     </p>
-    <div class="hero__row reveal delay-3">
+    <div class="hero__row">
       <a href="#menu" class="btn" data-hover>
         Explore the Menu
         <svg class="icn arr" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
@@ -643,6 +712,33 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
   </div>
 
   <div class="grid" id="grid"></div>
+</section>
+
+<!-- ===== Captured / Instagram gallery ===== -->
+<section class="section section--cream" id="captured">
+  <div class="captured-head">
+    <div>
+      <span class="eyebrow reveal">Captured at Lucia</span>
+      <h2 class="heading reveal delay-1">Slow mornings,<br/><span class="it">caught on film</span>.</h2>
+    </div>
+    <div>
+      <p class="lede reveal delay-2">Moments from our kitchen, our bar, and the guests who make Lucia feel like home. Tap a frame — and follow us for more.</p>
+      <a class="captured-cta reveal delay-2" href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-hover>
+        Follow @lucia__ksa
+        <svg class="icn" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="gallery" id="gallery">
+    <a class="tile tile--big"   href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="Three shots, one ritual"  data-img="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1400&q=80"></a>
+    <a class="tile"             href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="Hot from the oven"         data-img="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=900&q=80"></a>
+    <a class="tile"             href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="Sunday in a roll"          data-img="https://images.unsplash.com/photo-1509365465985-25d11c17e812?auto=format&fit=crop&w=900&q=80"></a>
+    <a class="tile tile--wide"  href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="The corner we saved you"   data-img="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1400&q=80"></a>
+    <a class="tile"             href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="Slow drip, no hurry"       data-img="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80"></a>
+    <a class="tile tile--tall"  href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="48 hours of patience"      data-img="https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=900&q=80"></a>
+    <a class="tile tile--big"   href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="Layered with care"         data-img="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=1400&q=80"></a>
+    <a class="tile"             href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="Late-morning sun"          data-img="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=80"></a>
+  </div>
 </section>
 
 <!-- ===== Reviews ===== -->
@@ -1071,6 +1167,34 @@ document.getElementById('tabs').addEventListener('click',e=>{
 buildMenu('all');
 
 /* =========================================================
+   Gallery
+========================================================= */
+const gallery=document.getElementById('gallery');
+gallery.querySelectorAll('.tile').forEach((tile,i)=>{
+  const img=document.createElement('img');
+  img.loading='lazy';img.alt=tile.dataset.cap||'';img.src=tile.dataset.img;
+  img.onerror=()=>{tile.style.background='linear-gradient(135deg,var(--burgundy),var(--espresso))';img.remove()};
+  tile.appendChild(img);
+  const cap=document.createElement('div');cap.className='tile__cap';cap.textContent=tile.dataset.cap||'';
+  tile.appendChild(cap);
+  const like=document.createElement('button');like.className='tile__like';like.setAttribute('aria-label','Like');
+  like.innerHTML=`<svg class="icn" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
+  like.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();like.classList.toggle('liked')});
+  tile.appendChild(like);
+});
+const tileObs=new IntersectionObserver(es=>{
+  es.forEach((e,k)=>{
+    if(e.isIntersecting){
+      const tiles=[...gallery.querySelectorAll('.tile')];
+      const idx=tiles.indexOf(e.target);
+      setTimeout(()=>e.target.classList.add('in'),idx*70);
+      tileObs.unobserve(e.target);
+    }
+  });
+},{threshold:.1});
+gallery.querySelectorAll('.tile').forEach(t=>tileObs.observe(t));
+
+/* =========================================================
    Reveal on scroll
 ========================================================= */
 const io=new IntersectionObserver(es=>{
@@ -1151,12 +1275,13 @@ document.addEventListener('mouseleave',()=>{document.querySelectorAll('.card').f
 ========================================================= */
 const loader=document.getElementById('loader'),pct=document.getElementById('pct');
 let p=0;
-const li=setInterval(()=>{p=Math.min(100,p+Math.random()*9+3);pct.textContent=`SLOW BREW · ${String(Math.floor(p)).padStart(2,'0')}%`;if(p>=100){clearInterval(li)}},80);
-window.addEventListener('load',()=>{
-  setTimeout(()=>{loader.classList.add('hide')},1900);
-});
-// fallback
-setTimeout(()=>loader.classList.add('hide'),3600);
+const li=setInterval(()=>{p=Math.min(100,p+Math.random()*9+3);pct.textContent=`SLOW BREW · ${String(Math.floor(p)).padStart(2,'0')}%`;if(p>=100){clearInterval(li)}},70);
+// dismiss as soon as DOM is interactive + a beat for the animation
+const dismissLoader=()=>{loader.classList.add('hide')};
+if(document.readyState!=='loading'){setTimeout(dismissLoader,1600)}
+else{document.addEventListener('DOMContentLoaded',()=>setTimeout(dismissLoader,1600))}
+// hard fallback so it can never get stuck
+setTimeout(dismissLoader,2400);
 
 /* totop */
 totop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));

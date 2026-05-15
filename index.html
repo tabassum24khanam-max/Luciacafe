@@ -77,7 +77,8 @@ body::before{
   display:flex;align-items:center;justify-content:center;flex-direction:column;gap:34px;
   transition:opacity .9s var(--ease-out),visibility 0s .9s;
 }
-.loader.hide{opacity:0;visibility:hidden}
+.loader.hide{opacity:0;visibility:hidden;pointer-events:none}
+.loader.gone{display:none !important}
 .loader__logo{
   font-family:'Playfair Display',serif;font-weight:500;letter-spacing:.04em;
   color:var(--cream);font-size:clamp(54px,9vw,128px);line-height:1;position:relative;
@@ -587,6 +588,24 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
   <div class="loader__pct" id="pct">SLOW BREW · 00%</div>
 </div>
 
+<!-- ===== Loader fail-safe (independent of main script) ===== -->
+<script>
+(function(){
+  function dismiss(){
+    var l=document.getElementById('loader');
+    if(!l) return;
+    l.classList.add('hide');
+    setTimeout(function(){ l.classList.add('gone'); },1100);
+  }
+  // Hard guarantee: loader is gone after 1.9s, no matter what
+  setTimeout(dismiss,1900);
+  // Instant dismiss if any uncaught error happens
+  window.addEventListener('error',function(){ dismiss(); });
+  // Expose for the main script to call early
+  window.__dismissLoader=dismiss;
+})();
+</script>
+
 <!-- ===== Cursor ===== -->
 <div class="cursor" id="cursor" aria-hidden="true"></div>
 <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
@@ -980,6 +999,17 @@ const REVIEWS=[
 ];
 
 /* =========================================================
+   IntersectionObserver — declared FIRST so any later code
+   (buildMenu, renderViewMore, gallery, hero reveal) can use it.
+   Gracefully degrades on browsers without IO.
+========================================================= */
+const io = (typeof IntersectionObserver !== 'undefined')
+  ? new IntersectionObserver(es=>{
+      es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+    },{threshold:.12})
+  : { observe(el){ if(el && el.classList) el.classList.add('in'); }, unobserve(){} };
+
+/* =========================================================
    Image fallback — runs when an Unsplash photo 404s.
    Replaces the failed <img> with an on-brand placeholder
    showing the dish's first letter + name in italic.
@@ -1236,24 +1266,23 @@ gallery.querySelectorAll('.tile').forEach((tile,i)=>{
   like.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();like.classList.toggle('liked')});
   tile.appendChild(like);
 });
-const tileObs=new IntersectionObserver(es=>{
-  es.forEach((e,k)=>{
-    if(e.isIntersecting){
-      const tiles=[...gallery.querySelectorAll('.tile')];
-      const idx=tiles.indexOf(e.target);
-      setTimeout(()=>e.target.classList.add('in'),idx*70);
-      tileObs.unobserve(e.target);
-    }
-  });
-},{threshold:.1});
+const tileObs = (typeof IntersectionObserver !== 'undefined')
+  ? new IntersectionObserver(es=>{
+      es.forEach(e=>{
+        if(e.isIntersecting){
+          const tiles=[...gallery.querySelectorAll('.tile')];
+          const idx=tiles.indexOf(e.target);
+          setTimeout(()=>e.target.classList.add('in'),idx*70);
+          tileObs.unobserve(e.target);
+        }
+      });
+    },{threshold:.1})
+  : { observe(t){ t.classList.add('in'); }, unobserve(){} };
 gallery.querySelectorAll('.tile').forEach(t=>tileObs.observe(t));
 
 /* =========================================================
-   Reveal on scroll
+   Reveal on scroll — observers attached
 ========================================================= */
-const io=new IntersectionObserver(es=>{
-  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
-},{threshold:.12});
 document.querySelectorAll('.reveal,.reveal-clip').forEach(el=>io.observe(el));
 
 /* hero in */

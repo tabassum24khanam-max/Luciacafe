@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>Lucia · لوتشيا — Italian Café & Bakery, Riyadh</title>
+<meta name="description" content="Lucia (لوتشيا) — specialty coffee, artisan bakery and Italian-inspired desserts on Khurais Road, Al Rawdah, Riyadh." />
+<meta name="theme-color" content="#3D1F1B" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet" />
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='78' font-size='90' font-family='Playfair Display, serif'>L</text></svg>" />
+<style>
+/* =========================================================
+   LUCIA — bespoke single-file site
+   Palette inspired by an Italian café in Riyadh:
+   espresso, burgundy, oat-cream, gold, terracotta
+========================================================= */
+:root{
+  --espresso:#2A1812;
+  --espresso-2:#3D1F1B;
+  --burgundy:#6B2230;
+  --burgundy-2:#8C2E3F;
+  --cream:#F4EAD5;
+  --cream-2:#FAF4E6;
+  --oat:#E8DCC4;
+  --gold:#C9A961;
+  --gold-2:#E0C589;
+  --terracotta:#C06849;
+  --rose:#E8C5BD;
+  --ink:#1A0F0B;
+
+  --ease:cubic-bezier(.2,.7,.2,1);
+  --ease-out:cubic-bezier(.16,1,.3,1);
+
+  --hpad:clamp(20px,4vw,72px);
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+html{scroll-behavior:smooth;background:var(--cream)}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  color:var(--espresso);
+  background:var(--cream);
+  overflow-x:hidden;
+  cursor:none;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+@media (max-width:900px){body{cursor:auto}}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--burgundy);color:var(--cream)}
+
+/* paper-grain texture overlay */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:9998;mix-blend-mode:multiply;opacity:.07;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .15  0 0 0 0 .08  0 0 0 0 .06  0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* ===== Custom cursor ===== */
+.cursor,.cursor-dot{position:fixed;top:0;left:0;pointer-events:none;z-index:10000;mix-blend-mode:difference;transition:transform .25s var(--ease),width .25s var(--ease),height .25s var(--ease),border-color .25s var(--ease)}
+.cursor{width:34px;height:34px;border:1.5px solid #f3e8d8;border-radius:50%;transform:translate(-50%,-50%);backdrop-filter:invert(.1)}
+.cursor-dot{width:6px;height:6px;background:#f3e8d8;border-radius:50%;transform:translate(-50%,-50%)}
+.cursor.is-hover{width:64px;height:64px;border-color:var(--gold-2);background:rgba(201,169,97,.15)}
+.cursor.is-down{transform:translate(-50%,-50%) scale(.7)}
+@media (max-width:900px){.cursor,.cursor-dot{display:none}}
+
+/* ===== Scroll progress ===== */
+.progress{position:fixed;top:0;left:0;height:3px;width:0;background:linear-gradient(90deg,var(--gold),var(--burgundy));z-index:9999;transition:width .15s linear}
+
+/* ===== Loader ===== */
+.loader{
+  position:fixed;inset:0;z-index:9997;background:var(--espresso);
+  display:flex;align-items:center;justify-content:center;flex-direction:column;gap:34px;
+  transition:opacity .9s var(--ease-out),visibility 0s .9s;
+}
+.loader.hide{opacity:0;visibility:hidden}
+.loader__logo{
+  font-family:'Playfair Display',serif;font-weight:500;letter-spacing:.04em;
+  color:var(--cream);font-size:clamp(54px,9vw,128px);line-height:1;position:relative;
+}
+.loader__logo span{display:inline-block;transform:translateY(110%);opacity:0;animation:rise .9s var(--ease-out) forwards}
+.loader__logo span:nth-child(1){animation-delay:.05s}
+.loader__logo span:nth-child(2){animation-delay:.14s}
+.loader__logo span:nth-child(3){animation-delay:.23s}
+.loader__logo span:nth-child(4){animation-delay:.32s}
+.loader__logo span:nth-child(5){animation-delay:.41s}
+.loader__logo .acc{color:var(--gold-2);font-style:italic}
+.loader__ar{color:var(--gold-2);font-family:'Tajawal',sans-serif;font-size:18px;letter-spacing:.4em;opacity:0;animation:fade 1s .7s var(--ease-out) forwards}
+.loader__bar{width:min(420px,60vw);height:1px;background:rgba(244,234,213,.18);position:relative;overflow:hidden;border-radius:2px}
+.loader__bar::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--gold),var(--cream),var(--gold));transform:translateX(-100%);animation:bar 1.6s .3s var(--ease-out) forwards}
+.loader__pct{color:var(--gold-2);font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.5em;opacity:.7}
+.cup{position:absolute;left:50%;top:-90px;transform:translateX(-50%);width:46px;height:46px}
+.cup::before{content:"";position:absolute;inset:auto 0 0 0;height:30px;border-radius:0 0 14px 14px;background:linear-gradient(180deg,#f3e2c2,#c9a961);box-shadow:inset 0 -4px 0 #8a6f3b}
+.cup::after{content:"";position:absolute;right:-12px;top:14px;width:14px;height:14px;border:3px solid #c9a961;border-radius:50%}
+.steam{position:absolute;left:50%;top:-26px;width:3px;height:30px;background:linear-gradient(180deg,rgba(244,234,213,0),rgba(244,234,213,.6));border-radius:3px;filter:blur(2px);transform-origin:bottom center;animation:steam 1.8s infinite var(--ease-out)}
+.steam.s2{left:calc(50% - 10px);animation-delay:.4s}
+.steam.s3{left:calc(50% + 10px);animation-delay:.8s}
+
+@keyframes rise{to{transform:translateY(0);opacity:1}}
+@keyframes fade{to{opacity:1}}
+@keyframes bar{to{transform:translateX(100%)}}
+@keyframes steam{
+  0%{transform:translateX(-50%) translateY(0) scaleY(.4);opacity:0}
+  30%{opacity:.9}
+  100%{transform:translateX(-50%) translateY(-40px) scaleY(1);opacity:0}
+}
+
+/* ===== Reveal animations ===== */
+.reveal{opacity:0;transform:translateY(40px);transition:opacity 1s var(--ease-out),transform 1s var(--ease-out)}
+.reveal.in{opacity:1;transform:none}
+.reveal.delay-1{transition-delay:.08s}
+.reveal.delay-2{transition-delay:.16s}
+.reveal.delay-3{transition-delay:.24s}
+.reveal.delay-4{transition-delay:.32s}
+.reveal-clip{clip-path:inset(0 100% 0 0);transition:clip-path 1.2s var(--ease-out)}
+.reveal-clip.in{clip-path:inset(0 0 0 0)}
+
+/* ===== Header / Nav ===== */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px var(--hpad);
+  transition:background .4s var(--ease),padding .4s var(--ease),box-shadow .4s var(--ease),color .4s var(--ease);
+  color:var(--cream);
+}
+.nav.scrolled{background:rgba(42,24,18,.85);backdrop-filter:blur(14px) saturate(140%);padding:12px var(--hpad);box-shadow:0 1px 0 rgba(244,234,213,.06)}
+.nav__logo{font-family:'Playfair Display',serif;font-size:26px;letter-spacing:.06em;display:flex;align-items:center;gap:10px}
+.nav__logo i{font-style:italic;color:var(--gold-2)}
+.nav__logo small{font-family:'Tajawal',sans-serif;font-size:14px;letter-spacing:.3em;color:var(--gold-2);opacity:.85}
+.nav__links{display:flex;gap:34px;align-items:center}
+.nav__links a{position:relative;font-size:13px;letter-spacing:.22em;text-transform:uppercase;padding:8px 0}
+.nav__links a::after{content:"";position:absolute;left:0;right:100%;bottom:2px;height:1px;background:var(--gold-2);transition:right .5s var(--ease-out)}
+.nav__links a:hover::after,.nav__links a.active::after{right:0}
+.nav__cta{
+  display:inline-flex;align-items:center;gap:10px;padding:11px 22px;border:1px solid currentColor;border-radius:999px;
+  font-size:12px;letter-spacing:.28em;text-transform:uppercase;position:relative;overflow:hidden;transition:color .4s var(--ease)
+}
+.nav__cta::before{content:"";position:absolute;inset:0;background:var(--gold);transform:translateY(101%);transition:transform .5s var(--ease-out);z-index:-1}
+.nav__cta:hover{color:var(--espresso);border-color:var(--gold)}
+.nav__cta:hover::before{transform:translateY(0)}
+.menu-toggle{display:none;width:36px;height:36px;position:relative}
+.menu-toggle span{position:absolute;left:6px;right:6px;height:1.5px;background:currentColor;transition:transform .4s var(--ease),top .4s var(--ease)}
+.menu-toggle span:nth-child(1){top:13px}
+.menu-toggle span:nth-child(2){top:21px}
+.menu-toggle.open span:nth-child(1){top:17px;transform:rotate(45deg)}
+.menu-toggle.open span:nth-child(2){top:17px;transform:rotate(-45deg)}
+@media (max-width:900px){
+  .nav__links{position:fixed;inset:0;background:var(--espresso);flex-direction:column;justify-content:center;gap:30px;transform:translateY(-100%);transition:transform .55s var(--ease-out);padding-top:60px}
+  .nav__links.open{transform:translateY(0)}
+  .nav__links a{font-size:20px}
+  .menu-toggle{display:block;z-index:201}
+  .nav__cta{display:none}
+}
+
+/* ===== Hero ===== */
+.hero{
+  min-height:100vh;position:relative;overflow:hidden;
+  background:radial-gradient(ellipse at 20% 30%,#4a2620 0%,#2A1812 55%,#1A0F0B 100%);
+  color:var(--cream);
+  display:flex;align-items:center;
+  padding:120px var(--hpad) 80px;
+}
+.hero__bg{position:absolute;inset:0;opacity:.55}
+.hero__bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.06);transition:transform 12s linear}
+.hero.in .hero__bg img{transform:scale(1.15)}
+.hero__bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,15,11,.35) 0%,rgba(26,15,11,.55) 60%,var(--espresso) 100%),radial-gradient(ellipse at 70% 20%,transparent,rgba(42,24,18,.7))}
+.hero__inner{position:relative;width:100%;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr;gap:40px}
+.hero__eyebrow{font-family:'Tajawal',sans-serif;display:inline-flex;align-items:center;gap:14px;color:var(--gold-2);font-size:13px;letter-spacing:.4em;text-transform:uppercase}
+.hero__eyebrow::before{content:"";width:42px;height:1px;background:var(--gold-2)}
+.hero__title{
+  font-family:'Playfair Display',serif;font-weight:500;
+  font-size:clamp(56px,11vw,180px);line-height:.92;letter-spacing:-.02em;margin:18px 0 14px;
+}
+.hero__title .it{font-style:italic;color:var(--gold-2);font-weight:400}
+.hero__title .ar{display:block;font-family:'Tajawal',sans-serif;font-size:.42em;letter-spacing:.15em;color:var(--rose);margin-top:6px;font-weight:300}
+.hero__lede{max-width:560px;font-size:clamp(15px,1.4vw,18px);line-height:1.7;color:rgba(244,234,213,.85);font-weight:300}
+.hero__row{display:flex;flex-wrap:wrap;gap:18px;margin-top:36px;align-items:center}
+.btn{
+  --bg:var(--gold);--c:var(--espresso);
+  position:relative;display:inline-flex;align-items:center;gap:14px;padding:18px 30px;border-radius:999px;
+  background:var(--bg);color:var(--c);font-size:12px;letter-spacing:.3em;text-transform:uppercase;overflow:hidden;
+  transition:transform .35s var(--ease),box-shadow .35s var(--ease);
+  font-weight:500;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 18px 40px -16px rgba(201,169,97,.55)}
+.btn:active{transform:translateY(0)}
+.btn--ghost{--bg:transparent;--c:var(--cream);border:1px solid rgba(244,234,213,.3)}
+.btn--ghost:hover{box-shadow:inset 0 0 0 1px var(--gold-2)}
+.btn .arr{transition:transform .4s var(--ease-out)}
+.btn:hover .arr{transform:translateX(6px)}
+
+.hero__meta{position:absolute;left:var(--hpad);bottom:38px;display:flex;gap:36px;color:rgba(244,234,213,.7);font-size:11px;letter-spacing:.25em;text-transform:uppercase}
+.hero__meta b{color:var(--gold-2);font-weight:500;display:block;margin-top:6px;font-family:'Cormorant Garamond',serif;font-size:18px;letter-spacing:.05em;text-transform:none}
+.hero__scroll{position:absolute;right:var(--hpad);bottom:38px;writing-mode:vertical-rl;color:rgba(244,234,213,.7);font-size:10px;letter-spacing:.5em;text-transform:uppercase;display:flex;align-items:center;gap:14px}
+.hero__scroll::after{content:"";width:1px;height:60px;background:linear-gradient(180deg,var(--gold-2),transparent);animation:scrollLine 2.2s infinite}
+@keyframes scrollLine{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+
+/* floating beans */
+.beans{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.bean{position:absolute;width:14px;height:20px;background:radial-gradient(ellipse at 50% 50%,#5a3220 0,#2a1812 70%);border-radius:50%;opacity:.5;animation:floatY 14s linear infinite}
+.bean::before{content:"";position:absolute;left:50%;top:10%;bottom:10%;width:1px;background:#1a0f0b;transform:translateX(-50%)}
+
+@keyframes floatY{
+  0%{transform:translate3d(0,110vh,0) rotate(0)}
+  100%{transform:translate3d(20vw,-15vh,0) rotate(720deg)}
+}
+
+/* ===== Marquee ===== */
+.marquee{background:var(--espresso);color:var(--cream);border-top:1px solid rgba(244,234,213,.06);border-bottom:1px solid rgba(244,234,213,.06);overflow:hidden;padding:22px 0}
+.marquee__track{display:flex;gap:60px;white-space:nowrap;animation:scrollX 38s linear infinite;font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(28px,5vw,72px);color:rgba(244,234,213,.92)}
+.marquee__track span{display:inline-flex;align-items:center;gap:60px}
+.marquee__track .dot{width:10px;height:10px;background:var(--gold);border-radius:50%;display:inline-block}
+.marquee:hover .marquee__track{animation-play-state:paused}
+@keyframes scrollX{to{transform:translateX(-50%)}}
+
+/* ===== Sections ===== */
+section{position:relative}
+.section{padding:clamp(80px,12vw,160px) var(--hpad)}
+.section--cream{background:var(--cream)}
+.section--oat{background:var(--oat)}
+.section--dark{background:var(--espresso);color:var(--cream)}
+.eyebrow{font-size:11px;letter-spacing:.5em;text-transform:uppercase;color:var(--burgundy);display:inline-flex;align-items:center;gap:14px;font-weight:500}
+.eyebrow::before{content:"";width:32px;height:1px;background:var(--burgundy)}
+.section--dark .eyebrow{color:var(--gold-2)}
+.section--dark .eyebrow::before{background:var(--gold-2)}
+.heading{font-family:'Playfair Display',serif;font-weight:500;font-size:clamp(36px,5.5vw,82px);line-height:1;letter-spacing:-.015em;margin:18px 0 22px}
+.heading .it{font-style:italic;color:var(--burgundy)}
+.section--dark .heading .it{color:var(--gold-2)}
+.lede{max-width:580px;font-size:clamp(15px,1.3vw,18px);line-height:1.75;color:rgba(42,24,18,.78);font-weight:300}
+.section--dark .lede{color:rgba(244,234,213,.78)}
+
+/* ===== Story / About ===== */
+.story{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(40px,7vw,100px);align-items:center;max-width:1280px;margin:0 auto}
+.story__media{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px}
+.story__media img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease-out)}
+.story__media:hover img{transform:scale(1.05)}
+.story__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(42,24,18,.4))}
+.story__stamp{position:absolute;left:-24px;top:-24px;width:160px;height:160px;border-radius:50%;background:var(--burgundy);color:var(--cream);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-style:italic;font-size:18px;text-align:center;animation:spin 18s linear infinite;box-shadow:0 16px 40px -12px rgba(42,24,18,.5);z-index:2}
+.story__stamp svg{width:100%;height:100%;position:absolute;inset:0}
+.story__stamp svg textPath{font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:.32em;fill:var(--gold-2);text-transform:uppercase}
+.story__stamp .dot{position:relative;width:16px;height:16px;background:var(--gold);border-radius:50%}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:880px){.story{grid-template-columns:1fr}.story__stamp{width:120px;height:120px;left:auto;right:-12px;top:-12px}}
+
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:40px;border-top:1px solid rgba(42,24,18,.12);padding-top:30px}
+.kv > div b{display:block;font-family:'Cormorant Garamond',serif;font-size:34px;color:var(--burgundy);font-weight:500;line-height:1}
+.kv > div span{display:block;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:rgba(42,24,18,.6);margin-top:6px}
+
+/* ===== Menu ===== */
+.menu-head{max-width:1280px;margin:0 auto 50px;display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:30px}
+.tabs{display:flex;flex-wrap:wrap;gap:8px;max-width:1280px;margin:0 auto 40px}
+.tab{
+  position:relative;padding:12px 22px;border-radius:999px;font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(42,24,18,.65);transition:color .35s var(--ease),background .35s var(--ease);font-weight:500;
+}
+.tab:hover{color:var(--espresso)}
+.tab.active{background:var(--espresso);color:var(--cream)}
+.tab .count{display:inline-block;margin-left:8px;font-size:10px;color:var(--gold-2);opacity:.8}
+
+.grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:30px}
+.card{
+  position:relative;background:var(--cream-2);border-radius:8px;overflow:hidden;
+  transition:transform .55s var(--ease-out),box-shadow .55s var(--ease-out),opacity .5s var(--ease);
+  transform-style:preserve-3d;
+  will-change:transform;
+}
+.card.hidden{display:none}
+.card:hover{transform:translateY(-8px);box-shadow:0 30px 60px -30px rgba(42,24,18,.35)}
+.card__media{position:relative;aspect-ratio:4/5;overflow:hidden;background:var(--oat)}
+.card__media img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease-out),filter .6s var(--ease)}
+.card:hover .card__media img{transform:scale(1.08)}
+.card__media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(42,24,18,.55));opacity:0;transition:opacity .4s var(--ease)}
+.card:hover .card__media::after{opacity:1}
+.card__tag{position:absolute;top:14px;left:14px;background:rgba(244,234,213,.92);backdrop-filter:blur(6px);font-size:10px;letter-spacing:.3em;text-transform:uppercase;padding:6px 12px;border-radius:999px;color:var(--burgundy);font-weight:500;z-index:2}
+.card__price{
+  position:absolute;right:14px;bottom:14px;z-index:2;
+  font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--cream);
+  background:rgba(42,24,18,.55);backdrop-filter:blur(6px);padding:6px 14px;border-radius:999px;
+  transform:translateY(8px);opacity:0;transition:transform .5s var(--ease-out),opacity .5s var(--ease-out);
+}
+.card:hover .card__price{transform:translateY(0);opacity:1}
+.card__price small{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.2em;opacity:.7;margin-left:4px}
+.card__body{padding:20px 22px 26px}
+.card__title{font-family:'Playfair Display',serif;font-size:22px;font-weight:500;line-height:1.15;color:var(--espresso)}
+.card__title .ar{display:block;font-family:'Tajawal',sans-serif;font-size:13px;color:var(--burgundy);margin-top:4px;font-weight:300;letter-spacing:.04em}
+.card__desc{font-size:13px;line-height:1.6;color:rgba(42,24,18,.65);margin-top:10px;min-height:42px}
+.card__row{display:flex;align-items:center;justify-content:space-between;margin-top:14px;border-top:1px dashed rgba(42,24,18,.15);padding-top:14px}
+.card__cal{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:rgba(42,24,18,.5)}
+.card__add{
+  width:34px;height:34px;border-radius:50%;background:var(--espresso);color:var(--cream);
+  display:inline-flex;align-items:center;justify-content:center;transition:transform .35s var(--ease),background .35s var(--ease);
+}
+.card__add:hover{transform:rotate(90deg);background:var(--burgundy)}
+
+/* ===== Signature ===== */
+.signature{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:1400px;margin:0 auto;
+  background:var(--espresso);color:var(--cream);border-radius:8px;overflow:hidden;
+}
+.signature__media{position:relative;min-height:520px;overflow:hidden}
+.signature__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.signature__media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,rgba(42,24,18,.5))}
+.signature__body{padding:clamp(40px,6vw,80px);display:flex;flex-direction:column;justify-content:center}
+.signature__price{font-family:'Cormorant Garamond',serif;font-size:54px;color:var(--gold-2);margin-top:30px}
+.signature__notes{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px}
+.note{font-size:11px;letter-spacing:.25em;text-transform:uppercase;padding:8px 14px;border:1px solid rgba(244,234,213,.2);border-radius:999px;color:rgba(244,234,213,.8)}
+@media(max-width:880px){.signature{grid-template-columns:1fr}.signature__media{min-height:340px}}
+
+/* ===== Reviews ===== */
+.reviews{max-width:1280px;margin:0 auto;position:relative}
+.stars{display:flex;gap:50px;align-items:center;justify-content:center;margin-bottom:60px;flex-wrap:wrap}
+.stars__big{font-family:'Playfair Display',serif;font-size:96px;color:var(--gold);line-height:1;font-weight:500}
+.stars__big small{font-family:'Inter',sans-serif;font-size:14px;color:rgba(244,234,213,.7);letter-spacing:.2em;display:block;margin-top:6px;text-transform:uppercase}
+.stars__row{display:flex;gap:4px;color:var(--gold);font-size:24px}
+.review-track{position:relative;overflow:hidden;padding:20px 0}
+.review-row{display:flex;gap:24px;transition:transform .8s var(--ease-out)}
+.review{
+  flex:0 0 calc((100% - 48px)/3);min-width:280px;
+  background:rgba(244,234,213,.06);border:1px solid rgba(244,234,213,.12);
+  border-radius:10px;padding:36px 32px;backdrop-filter:blur(8px);
+  transition:transform .5s var(--ease),background .5s var(--ease),border-color .5s var(--ease);
+  position:relative;
+}
+.review:hover{transform:translateY(-6px);background:rgba(244,234,213,.1);border-color:var(--gold-2)}
+.review__quote{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22px;line-height:1.45;color:rgba(244,234,213,.92);font-weight:400}
+.review__quote::before{content:"\201C";position:absolute;top:-30px;left:24px;font-family:'Playfair Display',serif;font-size:120px;color:var(--gold-2);opacity:.28;line-height:1}
+.review__author{margin-top:24px;display:flex;align-items:center;gap:14px}
+.review__avatar{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--burgundy));display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;color:var(--cream);font-size:18px;font-weight:500}
+.review__name{font-weight:500;font-size:14px;letter-spacing:.05em}
+.review__name small{display:block;font-weight:300;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold-2);margin-top:3px}
+.review__stars{margin-top:12px;color:var(--gold);font-size:14px;letter-spacing:2px}
+.review-ctrl{display:flex;gap:10px;justify-content:center;margin-top:46px}
+.dot-btn{width:42px;height:42px;border-radius:50%;border:1px solid rgba(244,234,213,.3);color:var(--cream);display:inline-flex;align-items:center;justify-content:center;transition:all .35s var(--ease)}
+.dot-btn:hover{background:var(--gold);color:var(--espresso);border-color:var(--gold)}
+@media(max-width:900px){.review{flex:0 0 calc(100% - 12px)}}
+
+/* ===== Visit Us ===== */
+.visit{display:grid;grid-template-columns:1fr 1.1fr;gap:0;max-width:1400px;margin:0 auto;border-radius:8px;overflow:hidden;background:var(--cream-2);box-shadow:0 30px 80px -40px rgba(42,24,18,.3)}
+.visit__info{padding:clamp(36px,5vw,72px)}
+.visit__info h3{font-family:'Playfair Display',serif;font-size:36px;font-weight:500;margin:14px 0 16px;line-height:1.1}
+.visit__info h3 .it{font-style:italic;color:var(--burgundy)}
+.visit__list{margin-top:36px;display:grid;gap:22px}
+.visit__row{display:grid;grid-template-columns:44px 1fr;gap:18px;align-items:flex-start;padding-bottom:22px;border-bottom:1px dashed rgba(42,24,18,.15)}
+.visit__row:last-child{border-bottom:0}
+.visit__icon{width:44px;height:44px;border-radius:50%;background:var(--espresso);color:var(--cream);display:inline-flex;align-items:center;justify-content:center;flex:0 0 44px}
+.visit__row b{display:block;font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--espresso);font-weight:500;margin-bottom:4px}
+.visit__row span{display:block;font-size:13px;color:rgba(42,24,18,.7);line-height:1.55}
+.visit__row span.ar{font-family:'Tajawal',sans-serif;direction:rtl;color:rgba(42,24,18,.55);margin-top:4px;font-size:12px}
+.visit__socials{display:flex;gap:14px;margin-top:30px;flex-wrap:wrap}
+.soc{
+  display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;
+  background:var(--espresso);color:var(--cream);font-size:12px;letter-spacing:.25em;text-transform:uppercase;
+  transition:transform .35s var(--ease),background .35s var(--ease);font-weight:500;
+}
+.soc:hover{transform:translateY(-2px);background:var(--burgundy)}
+.soc.gold{background:var(--gold);color:var(--espresso)}
+.soc.gold:hover{background:var(--gold-2)}
+.visit__map{min-height:560px;position:relative}
+.visit__map iframe{width:100%;height:100%;border:0;filter:sepia(.15) hue-rotate(-10deg) saturate(.85)}
+.visit__map::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 80px rgba(42,24,18,.3);pointer-events:none}
+@media(max-width:880px){.visit{grid-template-columns:1fr}.visit__map{min-height:360px}}
+
+/* ===== Footer ===== */
+footer{background:var(--ink);color:var(--cream);padding:80px var(--hpad) 30px;position:relative;overflow:hidden}
+footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(180px,30vw,400px);font-weight:400;color:rgba(244,234,213,.04);left:50%;top:50%;transform:translate(-50%,-50%);letter-spacing:-.04em;pointer-events:none}
+.foot{position:relative;max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:50px}
+.foot__brand .logo{font-family:'Playfair Display',serif;font-size:42px;letter-spacing:.04em}
+.foot__brand .logo i{color:var(--gold-2);font-style:italic}
+.foot__brand p{color:rgba(244,234,213,.6);font-size:13px;line-height:1.7;margin-top:14px;max-width:320px}
+.foot h5{font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:var(--gold-2);font-weight:500;margin-bottom:18px}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.foot a{color:rgba(244,234,213,.75);font-size:13px;transition:color .3s var(--ease)}
+.foot a:hover{color:var(--gold-2)}
+.foot__bar{position:relative;max-width:1280px;margin:60px auto 0;padding-top:24px;border-top:1px solid rgba(244,234,213,.08);display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:rgba(244,234,213,.5)}
+@media(max-width:880px){.foot{grid-template-columns:1fr 1fr}}
+
+/* ===== Ripple click effect ===== */
+.ripple{position:fixed;border-radius:50%;background:radial-gradient(circle,rgba(201,169,97,.55) 0%,rgba(201,169,97,0) 70%);pointer-events:none;transform:translate(-50%,-50%) scale(0);z-index:9996;mix-blend-mode:screen;animation:ripple 1s var(--ease-out) forwards}
+@keyframes ripple{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
+
+/* Back to top */
+.totop{position:fixed;right:24px;bottom:24px;width:48px;height:48px;border-radius:50%;background:var(--espresso);color:var(--cream);display:inline-flex;align-items:center;justify-content:center;z-index:150;opacity:0;pointer-events:none;transition:opacity .4s var(--ease),transform .4s var(--ease);transform:translateY(20px)}
+.totop.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+.totop:hover{background:var(--burgundy)}
+
+/* SVG icons */
+.icn{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.icn-lg{width:22px;height:22px}
+
+/* utility */
+.mt-12{margin-top:12px}.center{text-align:center}
+@media(max-width:600px){
+  .hero__meta{flex-wrap:wrap;gap:18px;font-size:10px}
+  .hero__scroll{display:none}
+  .menu-head{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Loader ===== -->
+<div class="loader" id="loader">
+  <div style="position:relative">
+    <div class="cup" aria-hidden="true">
+      <div class="steam"></div><div class="steam s2"></div><div class="steam s3"></div>
+    </div>
+    <div class="loader__logo">
+      <span>L</span><span>u</span><span class="acc">c</span><span>i</span><span>a</span>
+    </div>
+  </div>
+  <div class="loader__ar">لوتشيا</div>
+  <div class="loader__bar"></div>
+  <div class="loader__pct" id="pct">SLOW BREW · 00%</div>
+</div>
+
+<!-- ===== Cursor ===== -->
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+<div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+<!-- ===== Scroll progress ===== -->
+<div class="progress" id="progress"></div>
+
+<!-- ===== Nav ===== -->
+<nav class="nav" id="nav">
+  <a href="#top" class="nav__logo" data-hover>
+    <span>Luc<i>i</i>a</span><small>لوتشيا</small>
+  </a>
+  <div class="nav__links" id="navLinks">
+    <a href="#story" data-hover>Story</a>
+    <a href="#menu" data-hover>Menu</a>
+    <a href="#reviews" data-hover>Voices</a>
+    <a href="#visit" data-hover>Visit</a>
+  </div>
+  <a href="#visit" class="nav__cta" data-hover>
+    Reserve a Table
+    <svg class="icn" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+  </a>
+  <button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span></button>
+</nav>
+
+<!-- ===== Hero ===== -->
+<header class="hero" id="top">
+  <div class="hero__bg">
+    <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=2000&q=80" alt="Café interior" />
+  </div>
+  <div class="beans" aria-hidden="true">
+    <span class="bean" style="left:8%;animation-delay:-2s"></span>
+    <span class="bean" style="left:22%;animation-delay:-6s"></span>
+    <span class="bean" style="left:38%;animation-delay:-10s"></span>
+    <span class="bean" style="left:55%;animation-delay:-4s"></span>
+    <span class="bean" style="left:72%;animation-delay:-12s"></span>
+    <span class="bean" style="left:86%;animation-delay:-8s"></span>
+  </div>
+  <div class="hero__inner">
+    <div class="hero__eyebrow reveal">Italian Café · Bakery · Specialty Coffee</div>
+    <h1 class="hero__title reveal delay-1">
+      Slow Mornings,<br/>Made <span class="it">Beautifully</span>.
+      <span class="ar">صباحٌ هادئ، صُنع بأناقة</span>
+    </h1>
+    <p class="hero__lede reveal delay-2">
+      Tucked along Khurais Road in Al Rawdah, Lucia is a quiet love letter to Italian craft —
+      sourdough fermented for days, drip coffee roasted with intention, and pastries pulled fresh from the oven each morning.
+    </p>
+    <div class="hero__row reveal delay-3">
+      <a href="#menu" class="btn" data-hover>
+        Explore the Menu
+        <svg class="icn arr" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#visit" class="btn btn--ghost" data-hover>
+        <svg class="icn" viewBox="0 0 24 24"><path d="M12 22s8-7.5 8-13a8 8 0 1 0-16 0c0 5.5 8 13 8 13Z"/><circle cx="12" cy="9" r="3"/></svg>
+        Find Us
+      </a>
+    </div>
+  </div>
+  <div class="hero__meta">
+    <div>Open Daily<br/><b>7:00 · 01:00</b></div>
+    <div>Riyadh, KSA<br/><b>Al Rawdah · Khurais Rd</b></div>
+    <div>Rated<br/><b>★ 4.3 / 5</b></div>
+  </div>
+  <div class="hero__scroll">Scroll</div>
+</header>
+
+<!-- ===== Marquee ===== -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>Slow Brewed <i class="dot"></i> Hand Crafted <i class="dot"></i> Made in Riyadh <i class="dot"></i> Italian Soul <i class="dot"></i> Since Day One <i class="dot"></i></span>
+    <span>Slow Brewed <i class="dot"></i> Hand Crafted <i class="dot"></i> Made in Riyadh <i class="dot"></i> Italian Soul <i class="dot"></i> Since Day One <i class="dot"></i></span>
+  </div>
+</div>
+
+<!-- ===== Story / About ===== -->
+<section class="section section--cream" id="story">
+  <div class="story">
+    <div class="story__media reveal-clip">
+      <div class="story__stamp" aria-hidden="true">
+        <svg viewBox="0 0 200 200"><defs><path id="circ" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs><text><textPath href="#circ" startOffset="0">SLOW · BREW · CRAFT · SINCE 2023 · </textPath></text></svg>
+        <span class="dot"></span>
+      </div>
+      <img src="https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80" alt="Pour over coffee at Lucia"/>
+    </div>
+    <div>
+      <span class="eyebrow reveal">Our Story</span>
+      <h2 class="heading reveal delay-1">A <span class="it">love letter</span><br/>to the slow ritual.</h2>
+      <p class="lede reveal delay-2">
+        We started with a stubborn belief — that the simplest things deserve the most care.
+        A croissant should shatter. A latte should hum. A sourdough should taste like the place it was made.
+        Every morning in our Al Rawdah kitchen begins long before the sun rises, with dough
+        rested overnight and beans roasted in small batches just down the road.
+      </p>
+      <p class="lede reveal delay-3" style="margin-top:18px">
+        Come for the coffee, stay for the kind of stillness Riyadh rarely lets you keep.
+      </p>
+      <div class="kv reveal delay-4">
+        <div><b>48hr</b><span>Slow fermentation</span></div>
+        <div><b>14°</b><span>Small batch roasts</span></div>
+        <div><b>06:00</b><span>Bakery rises</span></div>
+        <div><b>100%</b><span>Made in-house</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Menu ===== -->
+<section class="section section--oat" id="menu">
+  <div class="menu-head">
+    <div>
+      <span class="eyebrow reveal">The Menu</span>
+      <h2 class="heading reveal delay-1">Made fresh,<br/>served <span class="it">slow</span>.</h2>
+    </div>
+    <p class="lede reveal delay-2">From flaky almond croissants to slow-brewed Spanish lattes — every item is baked, brewed and plated in our Al Rawdah kitchen.</p>
+  </div>
+
+  <div class="tabs reveal delay-3" id="tabs">
+    <button class="tab active" data-cat="all">All</button>
+    <button class="tab" data-cat="bakery">Bakery</button>
+    <button class="tab" data-cat="bread">Bread & Sandwiches</button>
+    <button class="tab" data-cat="desserts">Desserts & Cakes</button>
+    <button class="tab" data-cat="cold">Cold Drinks</button>
+    <button class="tab" data-cat="hot">Hot Drinks</button>
+    <button class="tab" data-cat="gather">Gatherings</button>
+  </div>
+
+  <div class="grid" id="grid"></div>
+</section>
+
+<!-- ===== Signature ===== -->
+<section class="section section--cream">
+  <div class="signature reveal">
+    <div class="signature__media">
+      <img src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1400&q=80" alt="Lucia French Toast"/>
+    </div>
+    <div class="signature__body">
+      <span class="eyebrow" style="color:var(--gold-2)"><span style="background:var(--gold-2)" class="dot"></span> Signature</span>
+      <h3 class="heading" style="color:var(--cream);margin-top:14px">The <span class="it">Lucia</span> French Toast.</h3>
+      <p class="lede" style="color:rgba(244,234,213,.78)">
+        Brioche slow-dipped in vanilla custard, griddled to a golden crust, crowned with caramel cream,
+        ribbons of fresh blueberries and raspberries. The dish people order first, and the one they come back for.
+      </p>
+      <div class="signature__price">38 SR</div>
+      <div class="signature__notes">
+        <span class="note">Brioche</span><span class="note">Caramel Cream</span><span class="note">Berries</span><span class="note">Made to Order</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Reviews ===== -->
+<section class="section section--dark" id="reviews">
+  <div class="reviews">
+    <div class="center">
+      <span class="eyebrow reveal">Voices</span>
+      <h2 class="heading reveal delay-1" style="margin-top:10px">What guests <span class="it">say</span>.</h2>
+    </div>
+    <div class="stars reveal delay-2">
+      <div class="stars__big">4.3<small>Google rating</small></div>
+      <div>
+        <div class="stars__row">★ ★ ★ ★ ★</div>
+        <div style="color:rgba(244,234,213,.6);font-size:12px;letter-spacing:.25em;text-transform:uppercase;margin-top:10px">Beloved by Riyadh</div>
+      </div>
+    </div>
+
+    <div class="review-track">
+      <div class="review-row" id="reviewRow">
+        <!-- filled by JS -->
+      </div>
+    </div>
+    <div class="review-ctrl">
+      <button class="dot-btn" id="rPrev" aria-label="Previous"><svg class="icn" viewBox="0 0 24 24"><path d="M19 12H5M11 5l-7 7 7 7"/></svg></button>
+      <button class="dot-btn" id="rNext" aria-label="Next"><svg class="icn" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Visit ===== -->
+<section class="section section--cream" id="visit">
+  <div class="visit">
+    <div class="visit__info">
+      <span class="eyebrow reveal">Visit Us</span>
+      <h3 class="reveal delay-1">Find your <span class="it">slow morning</span>.</h3>
+      <p class="lede reveal delay-2" style="margin-top:6px">A few minutes off Khurais Road, in the heart of Al Rawdah. Pull up a seat — we saved you one.</p>
+
+      <div class="visit__list">
+        <div class="visit__row reveal delay-2">
+          <div class="visit__icon"><svg class="icn-lg icn" viewBox="0 0 24 24"><path d="M12 22s8-7.5 8-13a8 8 0 1 0-16 0c0 5.5 8 13 8 13Z"/><circle cx="12" cy="9" r="3"/></svg></div>
+          <div>
+            <b>Lucia · Al Rawdah</b>
+            <span>Khurais Road, Al Rawdah, Riyadh 13211, Saudi Arabia</span>
+            <span class="ar">طريق خريص، الروضة، الرياض 13211</span>
+          </div>
+        </div>
+        <div class="visit__row reveal delay-3">
+          <div class="visit__icon"><svg class="icn-lg icn" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <div>
+            <b>Open Daily</b>
+            <span>Sunday — Thursday · 7:00 am — 12:30 am</span>
+            <span>Friday — Saturday · 7:00 am — 1:30 am</span>
+          </div>
+        </div>
+        <div class="visit__row reveal delay-3">
+          <div class="visit__icon"><svg class="icn-lg icn" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 7l9 7 9-7"/></svg></div>
+          <div>
+            <b>Stay in Touch</b>
+            <span>Order delivery via HungerStation · Direct messages on Instagram</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="visit__socials">
+        <a class="soc gold" href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-hover>
+          <svg class="icn" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>
+          @lucia__ksa
+        </a>
+        <a class="soc" href="https://maps.app.goo.gl/95xdrKPvAyYyVejp6" target="_blank" rel="noopener" data-hover>
+          <svg class="icn" viewBox="0 0 24 24"><path d="M9 3 3 5v16l6-2 6 2 6-2V3l-6 2-6-2Z"/><path d="M9 3v16M15 5v16"/></svg>
+          Open in Maps
+        </a>
+      </div>
+    </div>
+    <div class="visit__map">
+      <iframe
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+        src="https://www.google.com/maps?q=lucia%20cafe%20al%20rawdah%20khurais%20riyadh&output=embed">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>
+  <div class="foot">
+    <div class="foot__brand">
+      <div class="logo">Luc<i>i</i>a</div>
+      <div style="color:var(--gold-2);font-family:'Tajawal',sans-serif;letter-spacing:.4em;font-size:14px;margin-top:4px">لوتشيا</div>
+      <p>An Italian café tucked into Al Rawdah, Riyadh. Slow coffee, fresh bread, a quiet corner whenever you need one.</p>
+    </div>
+    <div>
+      <h5>Explore</h5>
+      <ul>
+        <li><a href="#story" data-hover>Our Story</a></li>
+        <li><a href="#menu" data-hover>Menu</a></li>
+        <li><a href="#reviews" data-hover>Voices</a></li>
+        <li><a href="#visit" data-hover>Visit</a></li>
+      </ul>
+    </div>
+    <div>
+      <h5>Hours</h5>
+      <ul>
+        <li>Sun — Thu · 7:00 — 00:30</li>
+        <li>Fri — Sat · 7:00 — 01:30</li>
+        <li>Open Daily · 365</li>
+      </ul>
+    </div>
+    <div>
+      <h5>Follow</h5>
+      <ul>
+        <li><a href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-hover>Instagram</a></li>
+        <li><a href="https://maps.app.goo.gl/95xdrKPvAyYyVejp6" target="_blank" rel="noopener" data-hover>Google Maps</a></li>
+        <li><a href="https://hungerstation.com/sa-en/restaurant/riyadh/al-rawdah/175410" target="_blank" rel="noopener" data-hover>HungerStation</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot__bar">
+    <span>© Lucia Café · Al Rawdah, Riyadh</span>
+    <span>Crafted with care</span>
+  </div>
+</footer>
+
+<button class="totop" id="totop" aria-label="Back to top" data-hover>
+  <svg class="icn" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+/* =========================================================
+   Menu data — sourced from Lucia's HungerStation menu
+========================================================= */
+const MENU=[
+ // BAKERY
+ {cat:'bakery',name:'Pecan Croissant',ar:'كرواسون البقان',price:23,cal:430,desc:'Flaky butter croissant glazed with caramelised pecans.',img:'https://images.unsplash.com/photo-1623334044303-241021148842?auto=format&fit=crop&w=900&q=80',tag:'Bestseller'},
+ {cat:'bakery',name:'Almond Croissant',ar:'كرواسون اللوز',price:23,cal:412,desc:'Twice-baked, dusted in toasted almonds.',img:'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bakery',name:'Plain Croissant',ar:'كرواسون',price:15,cal:285,desc:'72 layers of butter, baked golden.',img:'https://images.unsplash.com/photo-1549903072-7e6e0bedb7fb?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bakery',name:'Cinnamon Roll',ar:'سينابون',price:27,cal:350,desc:'Soft roll with cinnamon sauce and brown sugar glaze.',img:'https://images.unsplash.com/photo-1509365465985-25d11c17e812?auto=format&fit=crop&w=900&q=80',tag:'Warm'},
+ {cat:'bakery',name:'Lucia Nutella',ar:'لوتشيا نوتيلا',price:20,cal:422,desc:'House pastry filled with creamy Nutella.',img:'https://images.unsplash.com/photo-1626803775151-61d756612f97?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bakery',name:'Cheese Croissant',ar:'كرواسون الجبن',price:20,cal:312,desc:'Three-cheese melt baked into our buttery dough.',img:'https://images.unsplash.com/photo-1620921568790-c1cf8984624c?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bakery',name:'Labneh & Zaatar Croissant',ar:'كرواسون لبنة وزعتر',price:21,cal:360,desc:'Levantine labneh meets a flaky French shell.',img:'https://images.unsplash.com/photo-1592861956120-e524fc739696?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bakery',name:'Danesh Mixed Cheeses',ar:'دانش بالجبن',price:21,cal:420,desc:'Danish-style pastry filled with mixed cheeses.',img:'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bakery',name:'Smoked Turkey Croissant',ar:'كرواسون الحبش المدخن',price:23,cal:520,desc:'Smoked turkey, cheese, layered into a warm croissant.',img:'https://images.unsplash.com/photo-1568625365131-079e026a927d?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bakery',name:'Swiss Pan Brownie',ar:'براوني سويسري',price:24,cal:640,desc:'Dense, fudgy, Swiss chocolate brownie.',img:'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bakery',name:'Raspberry Nutella',ar:'توت ونوتيلا',price:29,cal:540,desc:'Tart raspberries swirled into Nutella, baked warm.',img:'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bakery',name:'Focaccia',ar:'فوكاتشيا',price:18,cal:320,desc:'Italian bread, olive oil, rosemary, oregano, salty cheese.',img:'https://images.unsplash.com/photo-1568471173242-461f0a730452?auto=format&fit=crop&w=900&q=80'},
+
+ // BREAD / SANDWICHES
+ {cat:'bread',name:'Turkey Ciabatta',ar:'تشاباتا الحبش',price:27,cal:590,desc:'Fresh ciabatta with smoked turkey & cheese.',img:'https://images.unsplash.com/photo-1539252554935-80c8cabbe26b?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bread',name:'Spicy Tuna',ar:'تونة حارة',price:35,cal:560,desc:'Tuna folded into a zesty spicy sauce.',img:'https://images.unsplash.com/photo-1521305916504-4a1121188589?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bread',name:'Mozzarella Baguette',ar:'باغيت موزاريلا',price:23,cal:320,desc:'Fresh mozzarella in a crisp baguette.',img:'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bread',name:'Sourdough Bread',ar:'خبز الكاسرة',price:33,cal:980,desc:'Artisan loaf crafted through 48-hour natural fermentation.',img:'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=900&q=80',tag:'48hr'},
+ {cat:'bread',name:'Smoked Turkey Baguette',ar:'باغيت الحبش المدخن',price:22,cal:320,desc:'Crisp baguette layered with smoked turkey.',img:'https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bread',name:'Focaccia Burrata',ar:'فوكاتشيا بوراتا',price:30,cal:520,desc:'Pillowy focaccia with a creamy burrata centre.',img:'https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bread',name:'Ciabatta Chicken Pesto',ar:'تشاباتا دجاج بيستو',price:33,cal:620,desc:'Grilled chicken & basil pesto on toasted ciabatta.',img:'https://images.unsplash.com/photo-1481070414801-51fd732d7184?auto=format&fit=crop&w=900&q=80'},
+ {cat:'bread',name:'Ciabatta Halloumi',ar:'تشاباتا الحلوم',price:23,cal:686,desc:'Pan-seared halloumi tucked into warm ciabatta.',img:'https://images.unsplash.com/photo-1626078297207-eba775eeac99?auto=format&fit=crop&w=900&q=80'},
+
+ // DESSERTS
+ {cat:'desserts',name:'Lucia French Toast',ar:'فرنش توست لوتشيا',price:38,cal:625,desc:'Caramel cream, blueberries, raspberries — our signature.',img:'https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=900&q=80',tag:'Signature'},
+ {cat:'desserts',name:'Matilda',ar:'ماتيلدا',price:36,cal:547,desc:'Dark chocolate melting cake, served warm.',img:'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=80'},
+ {cat:'desserts',name:'Tiramisu',ar:'تيراميسو',price:34,cal:450,desc:'Coffee-soaked savoiardi, mascarpone, cocoa.',img:'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=900&q=80',tag:'Italian'},
+ {cat:'desserts',name:'Dolce',ar:'دولتشي',price:35,cal:437,desc:'Layered chocolate & cream — sweet, soft, slow.',img:'https://images.unsplash.com/photo-1551024506-0bccd828d307?auto=format&fit=crop&w=900&q=80'},
+ {cat:'desserts',name:'Mango Trifle',ar:'ترايفل المانجو',price:35,cal:336,desc:'Fresh mango, cream, soft sponge.',img:'https://images.unsplash.com/photo-1488477181946-6428a0291777?auto=format&fit=crop&w=900&q=80'},
+ {cat:'desserts',name:'Lemon Berry Cake',ar:'كيكة الليمون والتوت',price:35,cal:536,desc:'Lemon sponge folded with fresh berries.',img:'https://images.unsplash.com/photo-1565958011703-44f9829ba187?auto=format&fit=crop&w=900&q=80'},
+ {cat:'desserts',name:'Lemon Cake',ar:'كيكة الليمون',price:18,cal:256,desc:'Bright, citrusy, single-serve loaf cake.',img:'https://images.unsplash.com/photo-1519869325930-281384150729?auto=format&fit=crop&w=900&q=80'},
+ {cat:'desserts',name:'Marble Cake',ar:'كيكة الرخام',price:18,cal:292,desc:'Vanilla & chocolate, swirled.',img:'https://images.unsplash.com/photo-1535141192574-5d4897c12636?auto=format&fit=crop&w=900&q=80'},
+ {cat:'desserts',name:'Cookies',ar:'كوكيز',price:18,cal:180,desc:'Baked fresh daily, chocolate flavoured.',img:'https://images.unsplash.com/photo-1499636136210-6f4ee915583e?auto=format&fit=crop&w=900&q=80'},
+ {cat:'desserts',name:'Crunchy Chocolate',ar:'شوكولاتة كرانشي',price:18,cal:235,desc:'Snap, crunch, cocoa-rich finish.',img:'https://images.unsplash.com/photo-1623428187969-5da2dcea5ebf?auto=format&fit=crop&w=900&q=80'},
+
+ // COLD
+ {cat:'cold',name:'Cold Special Roast Drip',ar:'دريب بارد',price:14,cal:0,desc:'Our small-batch drip, served cold.',img:'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=80',tag:'House'},
+ {cat:'cold',name:'Iced Americano',ar:'أمريكانو مثلج',price:18,cal:5,desc:'Two shots, water, ice. Clean.',img:'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=900&q=80'},
+ {cat:'cold',name:'Alfredo',ar:'الفريدو',price:19,cal:60,desc:'Espresso shaken until silky-smooth.',img:'https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=900&q=80'},
+ {cat:'cold',name:'Spanish Latte (Cold)',ar:'سبانش لاتيه بارد',price:28,cal:290,desc:'Espresso, milk, a whisper of condensed milk.',img:'https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=900&q=80',tag:'Loved'},
+ {cat:'cold',name:'Iced Latte',ar:'لاتيه مثلج',price:21,cal:230,desc:'Espresso met by cold milk, gently stirred.',img:'https://images.unsplash.com/photo-1517959105821-eaf2591984ca?auto=format&fit=crop&w=900&q=80'},
+ {cat:'cold',name:'Iced Matcha',ar:'ماتشا مثلجة',price:28,cal:210,desc:'Ceremonial-grade matcha, cold milk, slow whisk.',img:'https://images.unsplash.com/photo-1545665225-b23b99e4d45e?auto=format&fit=crop&w=900&q=80'},
+ {cat:'cold',name:'Karkidih (Hibiscus)',ar:'كركديه',price:22,cal:40,desc:'Hibiscus brewed cold — floral, tart.',img:'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=900&q=80'},
+ {cat:'cold',name:'Orange Juice',ar:'عصير البرتقال',price:17,cal:135,desc:'Freshly squeezed, every morning.',img:'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=900&q=80'},
+
+ // HOT
+ {cat:'hot',name:'Special Roast Drip',ar:'دريب خاص',price:14,cal:2,desc:'Our small-batch filter, bright and clear.',img:'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80',tag:'Pour-Over'},
+ {cat:'hot',name:'Hot Spanish Latte',ar:'سبانش لاتيه حار',price:27,cal:240,desc:'Espresso, steamed milk, condensed sweetness.',img:'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=900&q=80'},
+ {cat:'hot',name:'Cappuccino',ar:'كابتشينو',price:21,cal:140,desc:'Espresso, milk, foam — in balance.',img:'https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=900&q=80'},
+ {cat:'hot',name:'Latte',ar:'لاتيه',price:20,cal:190,desc:'Espresso met gently by steamed milk.',img:'https://images.unsplash.com/photo-1561882468-9110e03e0f78?auto=format&fit=crop&w=900&q=80'},
+ {cat:'hot',name:'Cortado',ar:'كورتادو',price:18,cal:90,desc:'Equal parts espresso & warm milk.',img:'https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=900&q=80'},
+ {cat:'hot',name:'Espresso',ar:'إسبريسو',price:14,cal:2,desc:'A single pulled shot. Pure.',img:'https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?auto=format&fit=crop&w=900&q=80'},
+ {cat:'hot',name:'Americano',ar:'أمريكانو',price:15,cal:5,desc:'Espresso, hot water, depth.',img:'https://images.unsplash.com/photo-1494314671902-399b18174975?auto=format&fit=crop&w=900&q=80'},
+ {cat:'hot',name:'Hot Chocolate',ar:'هوت شوكليت',price:26,cal:410,desc:'Steamed milk poured over rich chocolate.',img:'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&w=900&q=80'},
+ {cat:'hot',name:'English Breakfast Tea',ar:'شاي إنجليزي',price:11,cal:0,desc:'Classic black tea, strong and warming.',img:'https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&w=900&q=80'},
+ {cat:'hot',name:'Green Tea',ar:'شاي أخضر',price:11,cal:0,desc:'Light, leafy, calming.',img:'https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&w=900&q=80'},
+
+ // GATHERINGS
+ {cat:'gather',name:'Pomegranate Cheesecake',ar:'تشيز كيك الرمان',price:149,cal:2478,desc:'Light cake, cheesecake cream, pomegranate seeds — serves 6-8.',img:'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=900&q=80',tag:'Serves 6-8'},
+ {cat:'gather',name:'Tiramisu Tray',ar:'صينية تيراميسو',price:129,cal:2345,desc:'Coffee & cocoa tiramisu — serves 6-8.',img:'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=900&q=80',tag:'Serves 6-8'},
+ {cat:'gather',name:'Special Roast Drip Box 2.2L',ar:'صندوق دريب 2.2 لتر',price:77,cal:10,desc:'Our specialty drip in shareable format.',img:'https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=900&q=80',tag:'For Sharing'},
+ {cat:'gather',name:'Special Roast Drip 1L',ar:'دريب 1 لتر',price:41,cal:5,desc:'A litre of slow filter — for small groups.',img:'https://images.unsplash.com/photo-1442550528053-c431ecb55509?auto=format&fit=crop&w=900&q=80'},
+];
+
+const REVIEWS=[
+ {n:'Lina A.',t:'Patron',q:'The cinnamon roll alone is worth the drive — but the staff make you stay. Quiet, beautiful, perfectly Italian.',s:5},
+ {n:'Mohammed R.',t:'Regular',q:'Their Spanish latte is the best in Riyadh. I order the same thing every morning and it has not missed once.',s:5},
+ {n:'Sara K.',t:'First visit',q:'Walked in for coffee, walked out with sourdough, a tiramisu and a plan to come back tomorrow.',s:5},
+ {n:'Faisal M.',t:'Patron',q:'The Lucia French Toast is a religious experience. Berries, caramel, brioche — please never take this off the menu.',s:5},
+ {n:'Noura T.',t:'Patron',q:'Aesthetic without being precious. The kind of café you bring a book to and lose two hours in.',s:5},
+ {n:'Abdullah S.',t:'Loyal guest',q:'Almond croissant, focaccia, and a drip — that’s my Friday. The bakery never disappoints.',s:4},
+ {n:'Reem H.',t:'Regular',q:'You can taste the slow fermentation in their sourdough. It’s the closest thing to Italy I’ve had in Riyadh.',s:5},
+ {n:'Yara N.',t:'Patron',q:'Service warm, design considered, coffee excellent. A complete experience — not just a café.',s:5},
+];
+
+/* =========================================================
+   Build menu
+========================================================= */
+const grid=document.getElementById('grid');
+function buildMenu(cat='all'){
+  const items=cat==='all'?MENU:MENU.filter(m=>m.cat===cat);
+  // count update
+  document.querySelectorAll('.tab').forEach(t=>{
+    const c=t.dataset.cat;
+    const n=c==='all'?MENU.length:MENU.filter(m=>m.cat===c).length;
+    let badge=t.querySelector('.count');
+    if(!badge){badge=document.createElement('span');badge.className='count';t.appendChild(badge)}
+    badge.textContent=`· ${n}`;
+  });
+  grid.innerHTML='';
+  items.forEach((m,i)=>{
+    const card=document.createElement('article');
+    card.className='card reveal';
+    card.style.transitionDelay=`${Math.min(i,12)*40}ms`;
+    card.innerHTML=`
+      <div class="card__media">
+        ${m.tag?`<span class="card__tag">${m.tag}</span>`:''}
+        <img loading="lazy" src="${m.img}" alt="${m.name}" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,var(--burgundy),var(--espresso))'"/>
+        <div class="card__price">${m.price}<small>SR</small></div>
+      </div>
+      <div class="card__body">
+        <h3 class="card__title">${m.name}<span class="ar">${m.ar}</span></h3>
+        <p class="card__desc">${m.desc}</p>
+        <div class="card__row">
+          <span class="card__cal">${m.cal} kcal</span>
+          <button class="card__add" data-hover aria-label="Add to order">
+            <svg class="icn" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+  // re-observe
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('#grid .reveal').forEach(el=>io.observe(el));
+  });
+}
+
+/* =========================================================
+   Reviews
+========================================================= */
+const reviewRow=document.getElementById('reviewRow');
+REVIEWS.concat(REVIEWS).forEach(r=>{
+  const el=document.createElement('div');
+  el.className='review';
+  const stars='★'.repeat(r.s)+'☆'.repeat(5-r.s);
+  const ini=r.n.split(' ').map(s=>s[0]).slice(0,2).join('');
+  el.innerHTML=`
+    <p class="review__quote">${r.q}</p>
+    <div class="review__author">
+      <div class="review__avatar">${ini}</div>
+      <div class="review__name">${r.n}<small>${r.t}</small></div>
+    </div>
+    <div class="review__stars">${stars}</div>`;
+  reviewRow.appendChild(el);
+});
+let rIdx=0;
+const reviewsCount=REVIEWS.length;
+function moveReviews(d){
+  rIdx=(rIdx+d+reviewsCount)%reviewsCount;
+  const w=reviewRow.children[0].getBoundingClientRect().width + 24;
+  reviewRow.style.transform=`translateX(${-rIdx*w}px)`;
+}
+document.getElementById('rNext').addEventListener('click',()=>moveReviews(1));
+document.getElementById('rPrev').addEventListener('click',()=>moveReviews(-1));
+setInterval(()=>moveReviews(1),5500);
+window.addEventListener('resize',()=>moveReviews(0));
+
+/* =========================================================
+   Tabs
+========================================================= */
+document.getElementById('tabs').addEventListener('click',e=>{
+  const t=e.target.closest('.tab');if(!t)return;
+  document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+  t.classList.add('active');
+  buildMenu(t.dataset.cat);
+});
+buildMenu('all');
+
+/* =========================================================
+   Reveal on scroll
+========================================================= */
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}});
+},{threshold:.12});
+document.querySelectorAll('.reveal,.reveal-clip').forEach(el=>io.observe(el));
+
+/* hero in */
+requestAnimationFrame(()=>document.querySelector('.hero').classList.add('in'));
+
+/* =========================================================
+   Nav scroll + progress
+========================================================= */
+const nav=document.getElementById('nav'),progress=document.getElementById('progress'),totop=document.getElementById('totop');
+const sections=['top','story','menu','reviews','visit'].map(id=>document.getElementById(id));
+const links=document.querySelectorAll('.nav__links a');
+function onScroll(){
+  const y=window.scrollY;
+  nav.classList.toggle('scrolled',y>40);
+  totop.classList.toggle('show',y>700);
+  const h=document.documentElement.scrollHeight-window.innerHeight;
+  progress.style.width=(y/h*100)+'%';
+  // active link
+  let cur=sections[0];
+  sections.forEach(s=>{if(s && s.getBoundingClientRect().top<140) cur=s});
+  links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+(cur?cur.id:'top')));
+}
+window.addEventListener('scroll',onScroll,{passive:true});
+onScroll();
+
+/* =========================================================
+   Mobile menu
+========================================================= */
+const mt=document.getElementById('menuToggle'),nl=document.getElementById('navLinks');
+mt.addEventListener('click',()=>{mt.classList.toggle('open');nl.classList.toggle('open')});
+nl.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{mt.classList.remove('open');nl.classList.remove('open')}));
+
+/* =========================================================
+   Cursor + hover
+========================================================= */
+const cursor=document.getElementById('cursor'),dot=document.getElementById('cursorDot');
+let mx=0,my=0,cx=0,cy=0;
+window.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.transform=`translate(${mx}px,${my}px) translate(-50%,-50%)`});
+function loopC(){cx+=(mx-cx)*.18;cy+=(my-cy)*.18;cursor.style.transform=`translate(${cx}px,${cy}px) translate(-50%,-50%)`;requestAnimationFrame(loopC)}loopC();
+document.addEventListener('mouseover',e=>{if(e.target.closest('[data-hover],a,button,.card,.review,.tab')) cursor.classList.add('is-hover')});
+document.addEventListener('mouseout',e=>{if(e.target.closest('[data-hover],a,button,.card,.review,.tab')) cursor.classList.remove('is-hover')});
+document.addEventListener('mousedown',()=>cursor.classList.add('is-down'));
+document.addEventListener('mouseup',()=>cursor.classList.remove('is-down'));
+
+/* =========================================================
+   Click ripple
+========================================================= */
+document.addEventListener('pointerdown',e=>{
+  const r=document.createElement('span');r.className='ripple';
+  r.style.left=e.clientX+'px';r.style.top=e.clientY+'px';
+  r.style.width=r.style.height=Math.max(120,Math.min(window.innerWidth,window.innerHeight)*.4)+'px';
+  document.body.appendChild(r);setTimeout(()=>r.remove(),1000);
+},{passive:true});
+
+/* =========================================================
+   Card tilt
+========================================================= */
+document.addEventListener('mousemove',e=>{
+  const card=e.target.closest('.card');
+  document.querySelectorAll('.card').forEach(c=>{
+    if(c!==card){c.style.transform=''}
+  });
+  if(!card) return;
+  const r=card.getBoundingClientRect();
+  const x=((e.clientX-r.left)/r.width-.5);
+  const y=((e.clientY-r.top)/r.height-.5);
+  card.style.transform=`translateY(-8px) rotateX(${-y*5}deg) rotateY(${x*6}deg)`;
+});
+document.addEventListener('mouseleave',()=>{document.querySelectorAll('.card').forEach(c=>c.style.transform='')});
+
+/* =========================================================
+   Loader
+========================================================= */
+const loader=document.getElementById('loader'),pct=document.getElementById('pct');
+let p=0;
+const li=setInterval(()=>{p=Math.min(100,p+Math.random()*9+3);pct.textContent=`SLOW BREW · ${String(Math.floor(p)).padStart(2,'0')}%`;if(p>=100){clearInterval(li)}},80);
+window.addEventListener('load',()=>{
+  setTimeout(()=>{loader.classList.add('hide')},1900);
+});
+// fallback
+setTimeout(()=>loader.classList.add('hide'),3600);
+
+/* totop */
+totop.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+
+/* smooth anchor */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',ev=>{
+    const id=a.getAttribute('href');
+    if(id.length>1){const t=document.querySelector(id);if(t){ev.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'})}}
+  });
+});
+
+/* Parallax hero */
+const heroBg=document.querySelector('.hero__bg img');
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  if(y<window.innerHeight && heroBg){heroBg.style.transform=`scale(1.1) translateY(${y*.25}px)`}
+},{passive:true});
+</script>
+</body>
+</html>

@@ -296,19 +296,9 @@ section{position:relative}
 }
 .card__add:hover{transform:rotate(90deg);background:var(--burgundy)}
 
-/* ===== Signature ===== */
-.signature{
-  display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:1400px;margin:0 auto;
-  background:var(--espresso);color:var(--cream);border-radius:8px;overflow:hidden;
-}
-.signature__media{position:relative;min-height:520px;overflow:hidden}
-.signature__media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.signature__media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 60%,rgba(42,24,18,.5))}
-.signature__body{padding:clamp(40px,6vw,80px);display:flex;flex-direction:column;justify-content:center}
-.signature__price{font-family:'Cormorant Garamond',serif;font-size:54px;color:var(--gold-2);margin-top:30px}
-.signature__notes{margin-top:30px;display:flex;flex-wrap:wrap;gap:10px}
-.note{font-size:11px;letter-spacing:.25em;text-transform:uppercase;padding:8px 14px;border:1px solid rgba(244,234,213,.2);border-radius:999px;color:rgba(244,234,213,.8)}
-@media(max-width:880px){.signature{grid-template-columns:1fr}.signature__media{min-height:340px}}
+/* ===== Note chips ===== */
+.note{font-size:11px;letter-spacing:.25em;text-transform:uppercase;padding:8px 14px;border:1px solid rgba(244,234,213,.22);border-radius:999px;color:rgba(244,234,213,.8);transition:background .35s var(--ease),color .35s var(--ease),border-color .35s var(--ease)}
+.note:hover{background:var(--gold);color:var(--espresso);border-color:var(--gold)}
 
 /* ===== Reviews ===== */
 .reviews{max-width:1280px;margin:0 auto;position:relative}
@@ -381,6 +371,86 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
 /* ===== Ripple click effect ===== */
 .ripple{position:fixed;border-radius:50%;background:radial-gradient(circle,rgba(201,169,97,.55) 0%,rgba(201,169,97,0) 70%);pointer-events:none;transform:translate(-50%,-50%) scale(0);z-index:9996;mix-blend-mode:screen;animation:ripple 1s var(--ease-out) forwards}
 @keyframes ripple{to{transform:translate(-50%,-50%) scale(1);opacity:0}}
+
+/* ===== Signatures carousel ===== */
+.signatures{max-width:1400px;margin:0 auto}
+.sig-head{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:end;margin-bottom:50px}
+.sig-head p{margin:0}
+.sig-stage{position:relative;border-radius:8px;overflow:hidden;background:var(--espresso);box-shadow:0 40px 80px -40px rgba(42,24,18,.45)}
+.sig-track{position:relative;height:clamp(520px,60vw,640px)}
+.sig-slide{position:absolute;inset:0;display:grid;grid-template-columns:1.05fr 1fr;opacity:0;visibility:hidden;transition:opacity .9s var(--ease-out),visibility 0s .9s}
+.sig-slide.active{opacity:1;visibility:visible;transition:opacity .9s var(--ease-out),visibility 0s 0s}
+.sig-slide__media{position:relative;overflow:hidden}
+.sig-slide__media img{width:100%;height:100%;object-fit:cover;transform:scale(1.12);transition:transform 1.6s var(--ease-out)}
+.sig-slide.active .sig-slide__media img{transform:scale(1.02)}
+.sig-slide__media::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 55%,rgba(42,24,18,.6))}
+.sig-slide__body{padding:clamp(34px,5vw,68px);display:flex;flex-direction:column;justify-content:center;color:var(--cream);position:relative}
+.sig-slide__num{position:absolute;top:24px;right:30px;font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:140px;color:rgba(244,234,213,.05);line-height:1;letter-spacing:-.04em}
+.sig-slide__tag{display:inline-flex;align-items:center;gap:12px;font-size:11px;letter-spacing:.4em;text-transform:uppercase;color:var(--gold-2);opacity:0;transform:translateY(14px);transition:opacity .8s .2s var(--ease-out),transform .8s .2s var(--ease-out)}
+.sig-slide__tag::before{content:"";width:28px;height:1px;background:var(--gold-2)}
+.sig-slide__name{font-family:'Playfair Display',serif;font-weight:500;font-size:clamp(38px,5vw,68px);line-height:1;letter-spacing:-.015em;margin:18px 0 6px;opacity:0;transform:translateY(20px);transition:opacity .9s .3s var(--ease-out),transform .9s .3s var(--ease-out)}
+.sig-slide__name .it{font-style:italic;color:var(--gold-2)}
+.sig-slide__ar{font-family:'Tajawal',sans-serif;color:var(--rose);letter-spacing:.18em;font-size:16px;font-weight:300;opacity:0;transform:translateY(14px);transition:opacity .8s .4s var(--ease-out),transform .8s .4s var(--ease-out)}
+.sig-slide__desc{color:rgba(244,234,213,.78);max-width:460px;line-height:1.7;font-size:15px;margin-top:22px;opacity:0;transform:translateY(14px);transition:opacity .8s .5s var(--ease-out),transform .8s .5s var(--ease-out)}
+.sig-slide__price{font-family:'Cormorant Garamond',serif;font-size:54px;color:var(--gold-2);margin-top:26px;line-height:1;opacity:0;transform:translateY(14px);transition:opacity .8s .6s var(--ease-out),transform .8s .6s var(--ease-out)}
+.sig-slide__price small{font-family:'Inter',sans-serif;font-size:12px;letter-spacing:.3em;color:rgba(244,234,213,.55);margin-left:6px}
+.sig-slide__notes{margin-top:22px;display:flex;flex-wrap:wrap;gap:8px;opacity:0;transform:translateY(14px);transition:opacity .8s .7s var(--ease-out),transform .8s .7s var(--ease-out)}
+.sig-slide.active .sig-slide__tag,
+.sig-slide.active .sig-slide__name,
+.sig-slide.active .sig-slide__ar,
+.sig-slide.active .sig-slide__desc,
+.sig-slide.active .sig-slide__price,
+.sig-slide.active .sig-slide__notes{opacity:1;transform:none}
+.sig-controls{display:flex;align-items:center;justify-content:space-between;margin-top:32px;padding:0 8px}
+.sig-dots{display:flex;gap:18px;align-items:center}
+.sig-dot{width:60px;height:14px;background:transparent;position:relative;cursor:pointer;border:0;padding:6px 0;display:flex;align-items:center}
+.sig-dot::before{content:"";flex:1;height:1.5px;background:rgba(42,24,18,.18);transition:background .4s var(--ease)}
+.sig-dot::after{content:"";position:absolute;left:0;top:50%;transform:translateY(-50%);height:1.5px;width:0;background:var(--burgundy);transition:width 5s linear}
+.sig-dot.active::after{width:100%}
+.sig-dot.active::before{background:transparent}
+.sig-arrows{display:flex;gap:10px}
+.sig-arr{width:54px;height:54px;border-radius:50%;border:1px solid rgba(42,24,18,.2);color:var(--espresso);display:inline-flex;align-items:center;justify-content:center;transition:all .35s var(--ease)}
+.sig-arr:hover{background:var(--espresso);color:var(--cream);border-color:var(--espresso);transform:translateY(-2px)}
+.sig-count{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:rgba(42,24,18,.55);margin-left:14px}
+.sig-count b{color:var(--burgundy);font-style:normal;font-weight:600;font-family:'Inter',sans-serif;font-size:14px;letter-spacing:.15em}
+@media(max-width:880px){
+  .sig-head{grid-template-columns:1fr}
+  .sig-track{height:auto;min-height:760px}
+  .sig-slide{grid-template-columns:1fr;grid-template-rows:280px 1fr}
+  .sig-slide__num{font-size:90px;top:14px;right:18px}
+  .sig-controls{flex-wrap:wrap;gap:14px;justify-content:center}
+  .sig-dot{width:42px}
+}
+
+/* ===== Menu tab transitions ===== */
+.grid{transition:opacity .3s var(--ease)}
+.grid.swapping{opacity:0;transform:translateY(10px);transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.grid .card{animation:cardIn .65s var(--ease-out) both}
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(22px) scale(.97)}
+  to{opacity:1;transform:none}
+}
+.tabs{position:relative}
+.tab{transition:color .35s var(--ease),background .35s var(--ease),transform .35s var(--ease)}
+.tab:active{transform:scale(.94)}
+
+/* ===== View more ===== */
+.card.is-hidden{display:none !important}
+.view-more-wrap{max-width:1280px;margin:54px auto 0;display:flex;justify-content:center;align-items:center;position:relative}
+.view-more-wrap::before,.view-more-wrap::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(42,24,18,.2),transparent)}
+.view-more{
+  position:relative;display:inline-flex;align-items:center;gap:14px;
+  padding:16px 32px;margin:0 22px;background:transparent;color:var(--espresso);
+  font-size:11px;letter-spacing:.32em;text-transform:uppercase;font-weight:500;
+  border:1px solid rgba(42,24,18,.25);border-radius:999px;
+  transition:all .4s var(--ease);overflow:hidden;
+}
+.view-more::before{content:"";position:absolute;inset:0;background:var(--espresso);transform:translateY(101%);transition:transform .5s var(--ease-out);z-index:-1}
+.view-more:hover{color:var(--cream);border-color:var(--espresso);transform:translateY(-2px)}
+.view-more:hover::before{transform:translateY(0)}
+.view-more .icn{transition:transform .4s var(--ease)}
+.view-more.open .icn{transform:rotate(180deg)}
+.view-more .count{opacity:.55;font-size:10px;letter-spacing:.25em}
 
 /* Back to top */
 .totop{position:fixed;right:24px;bottom:24px;width:48px;height:48px;border-radius:50%;background:var(--espresso);color:var(--cream);display:inline-flex;align-items:center;justify-content:center;z-index:150;opacity:0;pointer-events:none;transition:opacity .4s var(--ease),transform .4s var(--ease);transform:translateY(20px)}
@@ -524,6 +594,34 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
   </div>
 </section>
 
+<!-- ===== Signatures (carousel) ===== -->
+<section class="section section--cream" id="signatures">
+  <div class="signatures">
+    <div class="sig-head">
+      <div>
+        <span class="eyebrow reveal">Signatures</span>
+        <h2 class="heading reveal delay-1">The dishes <span class="it">they came for</span>.</h2>
+      </div>
+      <p class="lede reveal delay-2">Three favourites Riyadh keeps coming back for. Swipe, tap, or watch them turn — each one made fresh, every single morning.</p>
+    </div>
+
+    <div class="sig-stage reveal delay-2">
+      <div class="sig-track" id="sigTrack"><!-- slides injected --></div>
+    </div>
+
+    <div class="sig-controls reveal delay-3">
+      <div style="display:flex;align-items:center">
+        <div class="sig-dots" id="sigDots"></div>
+        <span class="sig-count"><b id="sigCur">01</b> &nbsp;/&nbsp; <span id="sigTot">03</span></span>
+      </div>
+      <div class="sig-arrows">
+        <button class="sig-arr" id="sigPrev" aria-label="Previous"><svg class="icn" viewBox="0 0 24 24"><path d="M19 12H5M11 5l-7 7 7 7"/></svg></button>
+        <button class="sig-arr" id="sigNext" aria-label="Next"><svg class="icn" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ===== Menu ===== -->
 <section class="section section--oat" id="menu">
   <div class="menu-head">
@@ -545,27 +643,6 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
   </div>
 
   <div class="grid" id="grid"></div>
-</section>
-
-<!-- ===== Signature ===== -->
-<section class="section section--cream">
-  <div class="signature reveal">
-    <div class="signature__media">
-      <img src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1400&q=80" alt="Lucia French Toast"/>
-    </div>
-    <div class="signature__body">
-      <span class="eyebrow" style="color:var(--gold-2)"><span style="background:var(--gold-2)" class="dot"></span> Signature</span>
-      <h3 class="heading" style="color:var(--cream);margin-top:14px">The <span class="it">Lucia</span> French Toast.</h3>
-      <p class="lede" style="color:rgba(244,234,213,.78)">
-        Brioche slow-dipped in vanilla custard, griddled to a golden crust, crowned with caramel cream,
-        ribbons of fresh blueberries and raspberries. The dish people order first, and the one they come back for.
-      </p>
-      <div class="signature__price">38 SR</div>
-      <div class="signature__notes">
-        <span class="note">Brioche</span><span class="note">Caramel Cream</span><span class="note">Berries</span><span class="note">Made to Order</span>
-      </div>
-    </div>
-  </div>
 </section>
 
 <!-- ===== Reviews ===== -->
@@ -776,12 +853,94 @@ const REVIEWS=[
 ];
 
 /* =========================================================
-   Build menu
+   Signatures carousel data
+========================================================= */
+const SIGNATURES=[
+ {
+   tag:'Signature · breakfast',
+   name:'Lucia French Toast',ar:'فرنش توست لوتشيا',
+   price:38,
+   img:'https://images.unsplash.com/photo-1484723091739-30a097e8f929?auto=format&fit=crop&w=1600&q=80',
+   desc:'Brioche slow-dipped in vanilla custard, griddled until the edges shatter, crowned with caramel cream and a fistful of fresh blueberries and raspberries. The first thing they order, the reason they come back.',
+   notes:['Brioche','Caramel Cream','Fresh Berries','Made to Order']
+ },
+ {
+   tag:'Signature · dessert',
+   name:'Tiramisu, fatta a mano',ar:'تيراميسو إيطالي',
+   price:34,
+   img:'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=1600&q=80',
+   desc:'Savoiardi soaked in our morning espresso, folded with mascarpone whipped to a cloud, dusted in dark cocoa. Slow, classic, Italian — the way it was meant to be.',
+   notes:['Mascarpone','Espresso','Cocoa','Layered Daily']
+ },
+ {
+   tag:'Signature · cold drink',
+   name:'Spanish Latte',ar:'سبانش لاتيه',
+   price:28,
+   img:'https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=1600&q=80',
+   desc:'Two shots of our small-batch espresso poured over cold milk, with a whisper of condensed sweetness. Velvet, gentle, the most-ordered drink behind our bar.',
+   notes:['Single Origin','Condensed Milk','Velvet Body','Iced']
+ }
+];
+
+/* =========================================================
+   Build signatures carousel
+========================================================= */
+const sigTrack=document.getElementById('sigTrack');
+const sigDots=document.getElementById('sigDots');
+SIGNATURES.forEach((s,i)=>{
+  const slide=document.createElement('div');
+  slide.className='sig-slide'+(i===0?' active':'');
+  slide.innerHTML=`
+    <div class="sig-slide__media">
+      <img src="${s.img}" alt="${s.name}" onerror="this.parentElement.style.background='linear-gradient(135deg,var(--burgundy),var(--espresso))'"/>
+    </div>
+    <div class="sig-slide__body">
+      <div class="sig-slide__num">0${i+1}</div>
+      <span class="sig-slide__tag">${s.tag}</span>
+      <h3 class="sig-slide__name">${s.name.split(' ').map((w,j)=>j===s.name.split(' ').length-1?`<span class="it">${w}</span>`:w).join(' ')}</h3>
+      <div class="sig-slide__ar">${s.ar}</div>
+      <p class="sig-slide__desc">${s.desc}</p>
+      <div class="sig-slide__price">${s.price}<small>SR</small></div>
+      <div class="sig-slide__notes">${s.notes.map(n=>`<span class="note">${n}</span>`).join('')}</div>
+    </div>`;
+  sigTrack.appendChild(slide);
+
+  const dot=document.createElement('button');
+  dot.className='sig-dot'+(i===0?' active':'');
+  dot.dataset.i=i;dot.setAttribute('aria-label',`Show ${s.name}`);
+  sigDots.appendChild(dot);
+});
+document.getElementById('sigTot').textContent=String(SIGNATURES.length).padStart(2,'0');
+
+let sigI=0,sigAuto;
+function showSig(i){
+  sigI=(i+SIGNATURES.length)%SIGNATURES.length;
+  document.querySelectorAll('.sig-slide').forEach((s,k)=>s.classList.toggle('active',k===sigI));
+  document.querySelectorAll('.sig-dot').forEach((d,k)=>d.classList.toggle('active',k===sigI));
+  document.getElementById('sigCur').textContent=String(sigI+1).padStart(2,'0');
+  clearTimeout(sigAuto);sigAuto=setTimeout(()=>showSig(sigI+1),5400);
+}
+document.getElementById('sigNext').addEventListener('click',()=>showSig(sigI+1));
+document.getElementById('sigPrev').addEventListener('click',()=>showSig(sigI-1));
+sigDots.addEventListener('click',e=>{const b=e.target.closest('.sig-dot');if(b)showSig(+b.dataset.i)});
+
+// touch swipe on signatures
+let sx=0;
+sigTrack.addEventListener('touchstart',e=>sx=e.touches[0].clientX,{passive:true});
+sigTrack.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>40)showSig(sigI+(dx<0?1:-1))});
+
+showSig(0);
+
+/* =========================================================
+   Build menu — with view-more + tab swap animation
 ========================================================= */
 const grid=document.getElementById('grid');
-function buildMenu(cat='all'){
+const INITIAL=6;
+let currentCat='all',expanded=false;
+
+function buildMenu(cat='all',animate=false){
   const items=cat==='all'?MENU:MENU.filter(m=>m.cat===cat);
-  // count update
+  // counts
   document.querySelectorAll('.tab').forEach(t=>{
     const c=t.dataset.cat;
     const n=c==='all'?MENU.length:MENU.filter(m=>m.cat===c).length;
@@ -789,32 +948,81 @@ function buildMenu(cat='all'){
     if(!badge){badge=document.createElement('span');badge.className='count';t.appendChild(badge)}
     badge.textContent=`· ${n}`;
   });
-  grid.innerHTML='';
-  items.forEach((m,i)=>{
-    const card=document.createElement('article');
-    card.className='card reveal';
-    card.style.transitionDelay=`${Math.min(i,12)*40}ms`;
-    card.innerHTML=`
-      <div class="card__media">
-        ${m.tag?`<span class="card__tag">${m.tag}</span>`:''}
-        <img loading="lazy" src="${m.img}" alt="${m.name}" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,var(--burgundy),var(--espresso))'"/>
-        <div class="card__price">${m.price}<small>SR</small></div>
-      </div>
-      <div class="card__body">
-        <h3 class="card__title">${m.name}<span class="ar">${m.ar}</span></h3>
-        <p class="card__desc">${m.desc}</p>
-        <div class="card__row">
-          <span class="card__cal">${m.cal} kcal</span>
-          <button class="card__add" data-hover aria-label="Add to order">
-            <svg class="icn" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          </button>
+
+  const render=()=>{
+    grid.innerHTML='';
+    items.forEach((m,i)=>{
+      const card=document.createElement('article');
+      card.className='card';
+      const hidden=!expanded && i>=INITIAL;
+      if(hidden) card.classList.add('is-hidden');
+      card.style.animationDelay=`${Math.min(i,11)*60}ms`;
+      card.innerHTML=`
+        <div class="card__media">
+          ${m.tag?`<span class="card__tag">${m.tag}</span>`:''}
+          <img loading="lazy" src="${m.img}" alt="${m.name}" onerror="this.style.display='none';this.parentElement.style.background='linear-gradient(135deg,var(--burgundy),var(--espresso))'"/>
+          <div class="card__price">${m.price}<small>SR</small></div>
         </div>
-      </div>`;
-    grid.appendChild(card);
-  });
-  // re-observe
-  requestAnimationFrame(()=>{
-    document.querySelectorAll('#grid .reveal').forEach(el=>io.observe(el));
+        <div class="card__body">
+          <h3 class="card__title">${m.name}<span class="ar">${m.ar}</span></h3>
+          <p class="card__desc">${m.desc}</p>
+          <div class="card__row">
+            <span class="card__cal">${m.cal} kcal</span>
+            <button class="card__add" data-hover aria-label="Add to order">
+              <svg class="icn" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
+    renderViewMore(items.length);
+    grid.classList.remove('swapping');
+  };
+
+  if(animate){
+    grid.classList.add('swapping');
+    setTimeout(render,260);
+  }else{
+    render();
+  }
+}
+
+function renderViewMore(total){
+  // remove existing
+  const old=document.getElementById('viewMoreWrap');if(old) old.remove();
+  if(total<=INITIAL) return;
+  const wrap=document.createElement('div');
+  wrap.className='view-more-wrap reveal';
+  wrap.id='viewMoreWrap';
+  const hiddenCount=total-INITIAL;
+  wrap.innerHTML=`
+    <button class="view-more ${expanded?'open':''}" id="viewMore" data-hover>
+      ${expanded?'Show less':`View full menu <span class="count">+${hiddenCount}</span>`}
+      <svg class="icn" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
+    </button>`;
+  grid.after(wrap);
+  io.observe(wrap);
+  document.getElementById('viewMore').addEventListener('click',()=>{
+    expanded=!expanded;
+    const cards=grid.querySelectorAll('.card');
+    if(expanded){
+      // reveal hidden cards with stagger
+      cards.forEach((c,i)=>{
+        if(c.classList.contains('is-hidden')){
+          c.classList.remove('is-hidden');
+          c.style.animation='none';
+          // restart animation
+          void c.offsetWidth;
+          c.style.animation='';
+          c.style.animationDelay=`${(i-INITIAL)*50}ms`;
+        }
+      });
+      renderViewMore(total);
+    }else{
+      cards.forEach((c,i)=>{if(i>=INITIAL)c.classList.add('is-hidden')});
+      renderViewMore(total);
+      document.getElementById('menu').scrollIntoView({behavior:'smooth',block:'start'});
+    }
   });
 }
 
@@ -853,9 +1061,12 @@ window.addEventListener('resize',()=>moveReviews(0));
 ========================================================= */
 document.getElementById('tabs').addEventListener('click',e=>{
   const t=e.target.closest('.tab');if(!t)return;
+  if(t.dataset.cat===currentCat) return;
   document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
   t.classList.add('active');
-  buildMenu(t.dataset.cat);
+  currentCat=t.dataset.cat;
+  expanded=false;
+  buildMenu(currentCat,true);
 });
 buildMenu('all');
 

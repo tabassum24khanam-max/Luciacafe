@@ -250,6 +250,16 @@ section{position:relative}
 .lede{max-width:580px;font-size:clamp(15px,1.3vw,18px);line-height:1.75;color:rgba(42,24,18,.78);font-weight:300}
 .section--dark .lede{color:rgba(244,234,213,.78)}
 
+/* ===== Loading shimmer for image containers (so blank/slow loads look designed) ===== */
+.story__media,.card__media,.tile,.sig-slide__media{
+  background:linear-gradient(110deg,#e6d9bf 8%,#f0e6d2 18%,#e6d9bf 33%);
+  background-size:220% 100%;
+  animation:shimmer 1.8s linear infinite;
+}
+.card__media,.sig-slide__media{background-color:var(--oat)}
+@keyframes shimmer{to{background-position:-220% 0}}
+.story__media img,.card__media img,.tile img,.sig-slide__media img{position:relative;z-index:1}
+
 /* ===== Story / About ===== */
 .story{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(40px,7vw,100px);align-items:center;max-width:1280px;margin:0 auto}
 .story__media{position:relative;aspect-ratio:4/5;overflow:hidden;border-radius:6px}
@@ -469,58 +479,70 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
 .view-more.open .icn{transform:rotate(180deg)}
 .view-more .count{opacity:.55;font-size:10px;letter-spacing:.25em}
 
-/* ===== Captured / Instagram gallery ===== */
-.captured-head{max-width:1280px;margin:0 auto 50px;display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:end}
-.captured-head .lede{margin:0}
-.captured-cta{display:inline-flex;align-items:center;gap:14px;font-size:12px;letter-spacing:.28em;text-transform:uppercase;color:var(--burgundy);font-weight:500;margin-top:18px;border-bottom:1px solid var(--burgundy);padding-bottom:8px;transition:gap .35s var(--ease)}
-.captured-cta:hover{gap:22px}
-.captured-cta svg{transition:transform .4s var(--ease)}
-.captured-cta:hover svg{transform:translateX(4px)}
+/* ===== Captured — mini Instagram profile ===== */
+.ig-intro{max-width:760px;margin:0 auto 46px}
+.ig{
+  max-width:840px;margin:0 auto;background:#fff;border:1px solid rgba(42,24,18,.1);
+  border-radius:16px;overflow:hidden;box-shadow:0 40px 90px -50px rgba(42,24,18,.5);
+}
+.igl{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.ig__bar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid rgba(42,24,18,.08)}
+.ig__brand{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:15px;color:var(--ink);letter-spacing:.01em}
+.ig__brand .igl{color:#C13584}
+.ig__open{font-size:13px;font-weight:600;color:#0095f6;letter-spacing:.02em}
 
-.gallery{
-  max-width:1400px;margin:0 auto;
-  display:grid;grid-template-columns:repeat(4,1fr);
-  grid-auto-rows:180px;gap:14px;
+.ig__header{display:grid;grid-template-columns:auto 1fr;gap:28px;padding:26px 26px 18px;align-items:center}
+.ig__avatar{
+  position:relative;width:120px;height:120px;border-radius:50%;flex:0 0 120px;
+  padding:3px;background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
 }
-.tile{
-  position:relative;overflow:hidden;border-radius:6px;cursor:pointer;
-  background:var(--oat);
-  transform:translateY(20px);opacity:0;
-  transition:transform .9s var(--ease-out),opacity .9s var(--ease-out);
+.ig__avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid #fff;background:var(--burgundy)}
+.ig__avatar-fb{display:none}
+.ig__avatar--fallback{display:flex;align-items:center;justify-content:center}
+.ig__avatar--fallback .ig__avatar-fb{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border-radius:50%;border:3px solid #fff;background:var(--burgundy);color:#fff;font-family:'Playfair Display',serif;font-size:54px;line-height:1}
+
+.ig__row1{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.ig__handle{font-family:'Inter',sans-serif;font-size:21px;font-weight:400;color:var(--ink);margin:0;letter-spacing:.01em}
+.ig__follow{background:#0095f6;color:#fff;font-size:13px;font-weight:600;padding:8px 22px;border-radius:9px;transition:background .3s var(--ease),transform .2s var(--ease)}
+.ig__follow:hover{background:#1aa1ff}
+.ig__follow:active{transform:scale(.96)}
+.ig__msg{background:#efefef;color:var(--ink);font-size:13px;font-weight:600;padding:8px 18px;border-radius:9px;transition:background .3s var(--ease)}
+.ig__msg:hover{background:#e2e2e2}
+.ig__stats{list-style:none;display:flex;gap:34px;padding:0;margin:18px 0 16px;font-size:15px;color:var(--ink)}
+.ig__stats b{font-weight:600}
+.ig__bio{font-size:14px;line-height:1.5;color:var(--ink)}
+.ig__bio strong{display:block;font-weight:600;margin-bottom:2px}
+.ig__loc{color:var(--ink-soft,#6d6258);color:rgba(42,24,18,.6)}
+
+.ig__tabbar{display:flex;justify-content:center;border-top:1px solid rgba(42,24,18,.08);margin-top:6px}
+.ig__tab{display:inline-flex;align-items:center;gap:8px;padding:14px 0;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--ink);border-top:1.5px solid var(--ink);margin-top:-1px}
+.ig__tab .igl{width:14px;height:14px}
+
+.ig__grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:4px}
+.ig__post{position:relative;aspect-ratio:1;overflow:hidden;cursor:pointer;background:var(--oat)}
+.ig__post img{width:100%;height:100%;object-fit:cover;transition:transform 1s var(--ease-out)}
+.ig__post:hover img{transform:scale(1.06)}
+.ig__post::after{content:"";position:absolute;inset:0;background:rgba(26,15,11,.5);opacity:0;transition:opacity .35s var(--ease);display:flex}
+.ig__post:hover::after{opacity:1}
+.ig__post-meta{
+  position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;gap:20px;
+  color:#fff;font-weight:600;font-size:15px;opacity:0;transform:scale(.9);transition:opacity .35s var(--ease),transform .35s var(--ease);
 }
-.tile.in{transform:translateY(0);opacity:1}
-.tile img{width:100%;height:100%;object-fit:cover;transition:transform 1.3s var(--ease-out),filter .6s var(--ease)}
-.tile:hover img{transform:scale(1.08)}
-.tile::after{
-  content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg,transparent 45%,rgba(26,15,11,.7));
-  opacity:0;transition:opacity .45s var(--ease);pointer-events:none;
+.ig__post:hover .ig__post-meta{opacity:1;transform:scale(1)}
+.ig__post-meta span{display:inline-flex;align-items:center;gap:7px}
+.ig__post-meta svg{width:18px;height:18px;fill:#fff;stroke:none}
+.ig__vbadge{position:absolute;top:8px;right:8px;z-index:3;width:22px;height:22px;color:#fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.ig__vbadge svg{width:100%;height:100%;fill:#fff;stroke:none}
+
+.ig__cta{
+  display:flex;align-items:center;justify-content:center;gap:12px;
+  padding:18px;border-top:1px solid rgba(42,24,18,.08);
+  font-size:13px;font-weight:600;letter-spacing:.04em;color:#fff;
+  background:linear-gradient(90deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5);
+  background-size:200% 100%;transition:background-position .6s var(--ease);
 }
-.tile:hover::after{opacity:1}
-.tile__cap{
-  position:absolute;left:18px;right:18px;bottom:16px;color:var(--cream);
-  font-family:'Cormorant Garamond',serif;font-style:italic;font-size:20px;line-height:1.2;
-  opacity:0;transform:translateY(10px);transition:all .45s var(--ease);z-index:2;
-}
-.tile:hover .tile__cap{opacity:1;transform:translateY(0)}
-.tile__like{
-  position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;
-  background:rgba(244,234,213,.18);backdrop-filter:blur(8px);
-  color:var(--cream);display:inline-flex;align-items:center;justify-content:center;
-  opacity:0;transform:scale(.8);transition:all .4s var(--ease);z-index:2;
-}
-.tile:hover .tile__like{opacity:1;transform:scale(1)}
-.tile__like.liked{background:var(--burgundy);color:var(--cream)}
-.tile--big{grid-column:span 2;grid-row:span 2}
-.tile--wide{grid-column:span 2}
-.tile--tall{grid-row:span 2}
-@media(max-width:880px){
-  .captured-head{grid-template-columns:1fr;align-items:flex-start}
-  .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:170px}
-  .tile--big{grid-column:span 2;grid-row:span 2}
-  .tile--wide{grid-column:span 2;grid-row:span 1}
-  .tile--tall{grid-column:span 1;grid-row:span 2}
-}
+.ig__cta:hover{background-position:100% 0}
+.ig__cta .igl{color:#fff}
 
 /* ===== Card / tile image fallback (when an Unsplash photo 404s) ===== */
 .card__media.no-img,
@@ -552,32 +574,6 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
 .totop:hover{background:var(--burgundy)}
 
 /* =========================================================
-   MOBILE ACTION DOCK — app-like sticky bar (phones only)
-========================================================= */
-.dock{
-  position:fixed;left:0;right:0;bottom:0;z-index:170;display:none;
-  padding:10px max(12px,env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-right));
-  background:linear-gradient(180deg,rgba(42,24,18,.0),rgba(26,15,11,.92) 38%);
-  pointer-events:none;
-}
-.dock__inner{
-  pointer-events:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
-  background:rgba(42,24,18,.88);backdrop-filter:blur(16px) saturate(140%);
-  border:1px solid rgba(244,234,213,.12);border-radius:20px;padding:8px;
-  box-shadow:0 20px 50px -20px rgba(0,0,0,.6);
-}
-.dock__btn{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
-  padding:11px 6px;border-radius:14px;color:var(--cream);
-  font-size:10px;letter-spacing:.18em;text-transform:uppercase;min-height:54px;
-  transition:background .3s var(--ease),transform .2s var(--ease);
-}
-.dock__btn svg{width:21px;height:21px}
-.dock__btn:active{transform:scale(.93);background:rgba(244,234,213,.1)}
-.dock__btn--accent{background:var(--gold);color:var(--espresso)}
-.dock__btn--accent:active{background:var(--gold-2)}
-
-/* =========================================================
    REDUCED MOTION — honor the OS setting
 ========================================================= */
 @media (prefers-reduced-motion:reduce){
@@ -606,12 +602,7 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
 /* ---- Tablet ---- */
 @media(max-width:900px){
   .section{padding:clamp(64px,11vw,110px) var(--hpad)}
-  .dock{display:block}
-  body{padding-bottom:0}
-  /* leave room so the dock never covers the footer's last row */
-  footer{padding-bottom:120px}
-  /* lift back-to-top above the dock */
-  .totop{bottom:96px;right:16px;width:44px;height:44px}
+  .totop{right:16px;bottom:16px;width:44px;height:44px}
 }
 
 /* ---- Phone ---- */
@@ -641,10 +632,11 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
   .heading{font-size:clamp(32px,9vw,46px)}
   .lede{font-size:15px}
 
-  /* Story */
-  .story{gap:34px}
-  .story__media{aspect-ratio:4/4.4}
-  .kv{gap:18px 22px;margin-top:30px;padding-top:24px}
+  /* Story — shorter image so there's no big empty gap before the text */
+  .story{gap:24px}
+  .story__media{aspect-ratio:16/11}
+  .story__stamp{width:96px;height:96px;right:-8px;top:-8px;font-size:14px}
+  .kv{gap:18px 22px;margin-top:28px;padding-top:24px}
   .kv > div b{font-size:28px}
 
   /* Signatures — cap heights so it fits a phone screen */
@@ -673,27 +665,38 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
   .tabs{scrollbar-width:none}
   .tab{flex:0 0 auto;scroll-snap-align:start;padding:12px 18px;min-height:44px;display:inline-flex;align-items:center}
 
-  /* Menu cards → horizontal layout so each fits without a giant image */
-  .grid{grid-template-columns:1fr;gap:14px}
-  .card{display:grid;grid-template-columns:38% 1fr;align-items:stretch}
-  .card__media{aspect-ratio:auto;height:100%;min-height:140px}
-  .card__media::after{opacity:1;background:linear-gradient(90deg,transparent 60%,rgba(42,24,18,.25))}
-  .card__price{transform:none;opacity:1;left:10px;right:auto;bottom:10px;font-size:18px;padding:5px 11px}
-  .card__tag{top:10px;left:10px;font-size:9px;padding:5px 9px}
-  .card__body{padding:16px 16px 16px 18px;display:flex;flex-direction:column}
-  .card__title{font-size:19px}
-  .card__title .ar{font-size:12px}
-  .card__desc{font-size:12.5px;min-height:0;margin-top:7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-  .card__row{margin-top:auto;padding-top:12px}
-  .card__add{width:38px;height:38px}
+  /* Menu — 2-column compact cards (image top, details below) */
+  .grid{grid-template-columns:1fr 1fr;gap:12px}
+  .card{display:block}
+  .card__media{aspect-ratio:4/4.1}
+  .card__price{transform:none;opacity:1;left:8px;right:auto;bottom:8px;font-size:16px;padding:4px 10px}
+  .card__tag{top:8px;left:8px;font-size:8px;padding:4px 8px;letter-spacing:.18em}
+  .card__body{padding:13px 13px 15px}
+  .card__title{font-size:15px;line-height:1.15}
+  .card__title .ar{font-size:11px;margin-top:3px}
+  .card__desc{font-size:11.5px;line-height:1.5;min-height:0;margin-top:7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card__row{margin-top:11px;padding-top:11px}
+  .card__cal{font-size:9px;letter-spacing:.18em}
+  .card__add{width:32px;height:32px}
   .view-more{margin:0 14px;padding:15px 26px}
 
-  /* Gallery — keep the variety, shorter rows */
-  .captured-head{margin-bottom:30px}
-  .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:130px;gap:10px}
-  .tile__cap{opacity:1;transform:none;font-size:15px;left:12px;right:12px;bottom:10px}
-  .tile::after{opacity:.55}
-  .tile__like{opacity:1;transform:none;width:32px;height:32px}
+  /* Instagram mini-profile — mobile: avatar centered on top, meta below */
+  .ig-intro{margin-bottom:30px}
+  .ig{border-radius:14px}
+  .ig__header{display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;padding:24px 16px 16px}
+  .ig__avatar{width:92px;height:92px;flex-basis:auto}
+  .ig__avatar--fallback .ig__avatar-fb{font-size:40px}
+  .ig__meta{width:100%}
+  .ig__row1{justify-content:center;gap:10px}
+  .ig__handle{font-size:19px;width:100%}
+  .ig__follow,.ig__msg{flex:1;text-align:center;padding:9px 10px;max-width:200px}
+  .ig__stats{gap:0;justify-content:space-around;margin:16px 0;font-size:13px;
+    border-top:1px solid rgba(42,24,18,.08);border-bottom:1px solid rgba(42,24,18,.08);padding:12px 0}
+  .ig__stats li{display:flex;flex-direction:column;gap:2px}
+  .ig__bio{font-size:13px;text-align:center}
+  .ig__post-meta{opacity:1;transform:none;gap:14px;font-size:12px}
+  .ig__post::after{opacity:.32}
+  .ig__cta{font-size:12px;padding:16px}
 
   /* Reviews */
   .stars{gap:24px;margin-bottom:36px}
@@ -724,9 +727,9 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
   .hero__title{font-size:clamp(38px,12vw,52px)}
   .hero__meta{font-size:8px;gap:8px}
   .hero__row .btn{font-size:10px;padding:15px 12px}
-  .card{grid-template-columns:40% 1fr}
-  .gallery{grid-auto-rows:118px}
-  .dock__btn{font-size:9px;letter-spacing:.12em}
+  .card__title{font-size:14px}
+  .card__desc{font-size:11px}
+  .ig__avatar{width:84px;height:84px}
 }
 
 /* ---- Touch devices: enable tasteful active states, drop hover-only motion ---- */
@@ -801,7 +804,7 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
 <!-- ===== Hero ===== -->
 <header class="hero" id="top">
   <div class="hero__bg">
-    <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=2000&q=80" alt="Café interior" />
+    <img src="img/post4.jpg" alt="Lucia bakery — fresh croissants" fetchpriority="high" onerror="this.style.display='none'" />
   </div>
   <div class="beans" aria-hidden="true">
     <span class="bean" style="left:8%;animation-delay:-2s"></span>
@@ -856,7 +859,7 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
         <svg viewBox="0 0 200 200"><defs><path id="circ" d="M100,100 m-78,0 a78,78 0 1,1 156,0 a78,78 0 1,1 -156,0"/></defs><text><textPath href="#circ" startOffset="0">SLOW · BREW · CRAFT · SINCE 2023 · </textPath></text></svg>
         <span class="dot"></span>
       </div>
-      <img src="https://images.unsplash.com/photo-1525610553991-2bede1a236e2?auto=format&fit=crop&w=1200&q=80" alt="Pour over coffee at Lucia"/>
+      <img src="img/post0.jpg" alt="Lucia brand cart" loading="lazy" decoding="async" onerror="mediaFallback(this,'Lucia')"/>
     </div>
     <div>
       <span class="eyebrow reveal">Our Story</span>
@@ -931,30 +934,59 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
   <div class="grid" id="grid"></div>
 </section>
 
-<!-- ===== Captured / Instagram gallery ===== -->
+<!-- ===== Captured / Instagram mini-profile ===== -->
 <section class="section section--cream" id="captured">
-  <div class="captured-head">
-    <div>
-      <span class="eyebrow reveal">Captured at Lucia</span>
-      <h2 class="heading reveal delay-1">Slow mornings,<br/><span class="it">caught on film</span>.</h2>
-    </div>
-    <div>
-      <p class="lede reveal delay-2">Moments from our kitchen, our bar, and the guests who make Lucia feel like home. Tap a frame — and follow us for more.</p>
-      <a class="captured-cta reveal delay-2" href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-hover>
-        Follow @lucia__ksa
-        <svg class="icn" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
-      </a>
-    </div>
+  <div class="ig-intro center">
+    <span class="eyebrow reveal" style="justify-content:center">Captured at Lucia</span>
+    <h2 class="heading reveal delay-1" style="margin-top:14px">Slow mornings,<br/><span class="it">caught on film</span>.</h2>
   </div>
-  <div class="gallery" id="gallery">
-    <a class="tile tile--big"   href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="Three shots, one ritual"  data-img="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=1400&q=80"></a>
-    <a class="tile"             href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="Hot from the oven"         data-img="https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=900&q=80"></a>
-    <a class="tile"             href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="Sunday in a roll"          data-img="https://images.unsplash.com/photo-1509365465985-25d11c17e812?auto=format&fit=crop&w=900&q=80"></a>
-    <a class="tile tile--wide"  href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="The corner we saved you"   data-img="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1400&q=80"></a>
-    <a class="tile"             href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="Slow drip, no hurry"       data-img="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80"></a>
-    <a class="tile tile--tall"  href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="48 hours of patience"      data-img="https://images.unsplash.com/photo-1586444248902-2f64eddc13df?auto=format&fit=crop&w=900&q=80"></a>
-    <a class="tile tile--big"   href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="Layered with care"         data-img="https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=1400&q=80"></a>
-    <a class="tile"             href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-cap="Late-morning sun"          data-img="https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=80"></a>
+
+  <div class="ig reveal delay-2">
+    <div class="ig__bar">
+      <span class="ig__brand">
+        <svg viewBox="0 0 24 24" class="igl"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </span>
+      <a class="ig__open" href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-hover>Open</a>
+    </div>
+
+    <div class="ig__header">
+      <div class="ig__avatar">
+        <img src="img/profile.jpg" alt="Lucia logo" loading="lazy" decoding="async" onerror="this.style.display='none';this.parentElement.classList.add('ig__avatar--fallback')"/>
+        <span class="ig__avatar-fb">Ú</span>
+      </div>
+      <div class="ig__meta">
+        <div class="ig__row1">
+          <h3 class="ig__handle">lucia__ksa</h3>
+          <a class="ig__follow" href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-hover>Follow</a>
+          <a class="ig__msg" href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-hover>Message</a>
+        </div>
+        <ul class="ig__stats">
+          <li><b>66</b> posts</li>
+          <li><b>1,568</b> followers</li>
+          <li><b>4</b> following</li>
+        </ul>
+        <div class="ig__bio">
+          <strong>lucia | لوتشيا</strong>
+          Bakehouse &amp; Coffee · A curated selection of baked goods, where flavour meets feeling.<br/>
+          <span class="ig__loc">📍 Al Rawdah, Riyadh</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ig__tabbar">
+      <span class="ig__tab active">
+        <svg viewBox="0 0 24 24" class="igl"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+        Posts
+      </span>
+    </div>
+
+    <div class="ig__grid" id="igGrid"><!-- injected from real posts --></div>
+
+    <a class="ig__cta" href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener" data-hover>
+      <svg viewBox="0 0 24 24" class="igl"><rect x="2.5" y="2.5" width="19" height="19" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.6" cy="6.4" r="1.1" fill="currentColor" stroke="none"/></svg>
+      Follow @lucia__ksa on Instagram
+    </a>
   </div>
 </section>
 
@@ -1083,24 +1115,6 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
 <button class="totop" id="totop" aria-label="Back to top" data-hover>
   <svg class="icn" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
-
-<!-- ===== Mobile action dock (phones only) ===== -->
-<nav class="dock" id="dock" aria-label="Quick actions">
-  <div class="dock__inner">
-    <a class="dock__btn" href="#menu">
-      <svg viewBox="0 0 24 24" class="icn"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
-      Menu
-    </a>
-    <a class="dock__btn dock__btn--accent" href="https://maps.app.goo.gl/95xdrKPvAyYyVejp6" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" class="icn"><path d="M12 22s8-7.5 8-13a8 8 0 1 0-16 0c0 5.5 8 13 8 13Z"/><circle cx="12" cy="9" r="3"/></svg>
-      Directions
-    </a>
-    <a class="dock__btn" href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener">
-      <svg viewBox="0 0 24 24" class="icn"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>
-      Follow
-    </a>
-  </div>
-</nav>
 
 <script>
 /* =========================================================
@@ -1436,34 +1450,35 @@ document.getElementById('tabs').addEventListener('click',e=>{
 buildMenu('all');
 
 /* =========================================================
-   Gallery
+   Instagram grid — built from real @lucia__ksa posts
+   (images downloaded into /img, like+comment counts are real)
 ========================================================= */
-const gallery=document.getElementById('gallery');
-gallery.querySelectorAll('.tile').forEach((tile,i)=>{
-  const img=document.createElement('img');
-  img.loading='lazy';img.decoding='async';img.alt=tile.dataset.cap||'';img.src=tile.dataset.img;
-  img.onerror=()=>mediaFallback(img,tile.dataset.cap||'Lucia');
-  tile.appendChild(img);
-  const cap=document.createElement('div');cap.className='tile__cap';cap.textContent=tile.dataset.cap||'';
-  tile.appendChild(cap);
-  const like=document.createElement('button');like.className='tile__like';like.setAttribute('aria-label','Like');
-  like.innerHTML=`<svg class="icn" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`;
-  like.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();like.classList.toggle('liked')});
-  tile.appendChild(like);
-});
-const tileObs = (typeof IntersectionObserver !== 'undefined')
-  ? new IntersectionObserver(es=>{
-      es.forEach(e=>{
-        if(e.isIntersecting){
-          const tiles=[...gallery.querySelectorAll('.tile')];
-          const idx=tiles.indexOf(e.target);
-          setTimeout(()=>e.target.classList.add('in'),idx*70);
-          tileObs.unobserve(e.target);
-        }
-      });
-    },{threshold:.1})
-  : { observe(t){ t.classList.add('in'); }, unobserve(){} };
-gallery.querySelectorAll('.tile').forEach(t=>tileObs.observe(t));
+const IG_POSTS=[
+  {f:'img/post0.jpg', alt:'Lucia branded cart',          likes:12, comments:9},
+  {f:'img/post4.jpg', alt:'Croissants, fresh baked',      likes:14, comments:3},
+  {f:'img/post6.jpg', alt:'Baker dusting croissants',     likes:18, comments:6},
+  {f:'img/post5.jpg', alt:'Get bready — croissants',      likes:12, comments:2},
+  {f:'img/post11.jpg',alt:'Lucia bakery',                 likes:7,  comments:0},
+  {f:'img/post7.jpg', alt:'Takosan — eggplant',           likes:10, comments:0},
+  {f:'img/post10.jpg',alt:'Takosan',                      likes:13, comments:2},
+  {f:'img/post8.jpg', alt:'Takosan croissant',            likes:10, comments:0},
+  {f:'img/post9.jpg', alt:'Takosan — tuna',               likes:9,  comments:0},
+];
+const IG_URL='https://www.instagram.com/lucia__ksa/';
+const igGrid=document.getElementById('igGrid');
+if(igGrid){
+  IG_POSTS.forEach((p,i)=>{
+    const a=document.createElement('a');
+    a.className='ig__post';a.href=IG_URL;a.target='_blank';a.rel='noopener';
+    a.innerHTML=`
+      <img loading="lazy" decoding="async" src="${p.f}" alt="${p.alt}" onerror="mediaFallback(this,'Lucia')"/>
+      <div class="ig__post-meta">
+        <span><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.7-10-9.3C.5 8.4 2.3 5 5.6 5c2 0 3.3 1.1 4.4 2.5C11 6.1 12.4 5 14.4 5c3.3 0 5.1 3.4 3.6 6.7C19.5 16.3 12 21 12 21z"/></svg>${p.likes}</span>
+        <span><svg viewBox="0 0 24 24"><path d="M21 11.5a8.5 8.5 0 0 1-12.4 7.5L3 21l2-5.6A8.5 8.5 0 1 1 21 11.5z"/></svg>${p.comments}</span>
+      </div>`;
+    igGrid.appendChild(a);
+  });
+}
 
 /* =========================================================
    Reveal on scroll — observers attached

@@ -551,23 +551,190 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
 .totop.show{opacity:1;pointer-events:auto;transform:translateY(0)}
 .totop:hover{background:var(--burgundy)}
 
+/* =========================================================
+   MOBILE ACTION DOCK — app-like sticky bar (phones only)
+========================================================= */
+.dock{
+  position:fixed;left:0;right:0;bottom:0;z-index:170;display:none;
+  padding:10px max(12px,env(safe-area-inset-left)) calc(10px + env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-right));
+  background:linear-gradient(180deg,rgba(42,24,18,.0),rgba(26,15,11,.92) 38%);
+  pointer-events:none;
+}
+.dock__inner{
+  pointer-events:auto;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  background:rgba(42,24,18,.88);backdrop-filter:blur(16px) saturate(140%);
+  border:1px solid rgba(244,234,213,.12);border-radius:20px;padding:8px;
+  box-shadow:0 20px 50px -20px rgba(0,0,0,.6);
+}
+.dock__btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  padding:11px 6px;border-radius:14px;color:var(--cream);
+  font-size:10px;letter-spacing:.18em;text-transform:uppercase;min-height:54px;
+  transition:background .3s var(--ease),transform .2s var(--ease);
+}
+.dock__btn svg{width:21px;height:21px}
+.dock__btn:active{transform:scale(.93);background:rgba(244,234,213,.1)}
+.dock__btn--accent{background:var(--gold);color:var(--espresso)}
+.dock__btn--accent:active{background:var(--gold-2)}
+
+/* =========================================================
+   REDUCED MOTION — honor the OS setting
+========================================================= */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;scroll-behavior:auto !important;
+  }
+  .reveal,.reveal-clip,.tile{opacity:1 !important;transform:none !important;clip-path:none !important}
+  .marquee__track,.bean,.steam,.story__stamp{animation:none !important}
+}
+
 /* SVG icons */
 .icn{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
 .icn-lg{width:22px;height:22px}
 
 /* utility */
 .mt-12{margin-top:12px}.center{text-align:center}
+
+/* =========================================================
+   MOBILE MAKEOVER
+   Scale the design down — don't strip it. Tap targets >=44px,
+   media heights capped so a card fits one screen, tabs become
+   a scroll-snap rail, and an app-like dock appears.
+========================================================= */
+
+/* ---- Tablet ---- */
+@media(max-width:900px){
+  .section{padding:clamp(64px,11vw,110px) var(--hpad)}
+  .dock{display:block}
+  body{padding-bottom:0}
+  /* leave room so the dock never covers the footer's last row */
+  footer{padding-bottom:120px}
+  /* lift back-to-top above the dock */
+  .totop{bottom:96px;right:16px;width:44px;height:44px}
+}
+
+/* ---- Phone ---- */
 @media(max-width:600px){
-  .hero{padding:100px var(--hpad) 110px;min-height:92vh}
-  .hero__title{font-size:clamp(46px,11vw,84px);line-height:1}
-  .hero__title .ar{font-size:.34em;letter-spacing:.12em}
-  .hero__lede{font-size:14px}
-  .hero__meta{flex-wrap:wrap;gap:14px;font-size:9px;left:var(--hpad);right:var(--hpad);bottom:24px}
-  .hero__meta b{font-size:15px}
+  :root{--hpad:20px}
+
+  /* Hero */
+  .hero{padding:104px var(--hpad) 120px;min-height:88vh;align-items:flex-end}
+  .hero__eyebrow{font-size:11px;letter-spacing:.2em}
+  .hero__title{font-size:clamp(44px,13vw,72px);line-height:.98;margin:14px 0 16px}
+  .hero__title .ar{font-size:.36em;letter-spacing:.1em;margin-top:10px}
+  .hero__lede{font-size:14.5px;line-height:1.65}
+  .hero__row{gap:12px;margin-top:28px;width:100%}
+  .hero__row .btn{flex:1;justify-content:center;padding:16px 18px;font-size:11px}
+  .hero__meta{position:static;margin-top:34px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:9px}
+  .hero__meta b{font-size:14px}
   .hero__scroll{display:none}
-  .menu-head{flex-direction:column;align-items:flex-start}
-  .nav__logo{font-size:22px}
+
+  /* Nav */
+  .nav{padding:14px var(--hpad)}
+  .nav.scrolled{padding:10px var(--hpad)}
+  .nav__logo{font-size:21px}
   .nav__logo small{display:none}
+  .nav__links a{font-size:22px;letter-spacing:.1em}
+
+  /* Section headings */
+  .heading{font-size:clamp(32px,9vw,46px)}
+  .lede{font-size:15px}
+
+  /* Story */
+  .story{gap:34px}
+  .story__media{aspect-ratio:4/4.4}
+  .kv{gap:18px 22px;margin-top:30px;padding-top:24px}
+  .kv > div b{font-size:28px}
+
+  /* Signatures — cap heights so it fits a phone screen */
+  .sig-head{margin-bottom:30px}
+  .sig-track{min-height:0;height:auto}
+  .sig-slide{position:absolute;grid-template-rows:230px auto;grid-template-columns:1fr}
+  .sig-slide:not(.active){display:none}
+  .sig-slide.active{position:relative}
+  .sig-slide__body{padding:26px 22px 30px}
+  .sig-slide__num{font-size:74px;top:10px;right:16px}
+  .sig-slide__name{font-size:clamp(30px,8vw,40px);margin:12px 0 4px}
+  .sig-slide__desc{font-size:14px;margin-top:14px}
+  .sig-slide__price{font-size:42px;margin-top:18px}
+  .sig-controls{margin-top:20px;padding:0}
+  .sig-arr{width:48px;height:48px}
+
+  /* Menu — tabs become a scroll-snap rail with an edge fade */
+  .menu-head{flex-direction:column;align-items:flex-start;gap:14px;margin-bottom:26px}
+  .tabs{
+    flex-wrap:nowrap;overflow-x:auto;scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;gap:8px;margin-bottom:24px;
+    padding:2px 40px 12px 0;mask-image:linear-gradient(90deg,#000 82%,transparent);
+    -webkit-mask-image:linear-gradient(90deg,#000 82%,transparent);
+  }
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs{scrollbar-width:none}
+  .tab{flex:0 0 auto;scroll-snap-align:start;padding:12px 18px;min-height:44px;display:inline-flex;align-items:center}
+
+  /* Menu cards → horizontal layout so each fits without a giant image */
+  .grid{grid-template-columns:1fr;gap:14px}
+  .card{display:grid;grid-template-columns:38% 1fr;align-items:stretch}
+  .card__media{aspect-ratio:auto;height:100%;min-height:140px}
+  .card__media::after{opacity:1;background:linear-gradient(90deg,transparent 60%,rgba(42,24,18,.25))}
+  .card__price{transform:none;opacity:1;left:10px;right:auto;bottom:10px;font-size:18px;padding:5px 11px}
+  .card__tag{top:10px;left:10px;font-size:9px;padding:5px 9px}
+  .card__body{padding:16px 16px 16px 18px;display:flex;flex-direction:column}
+  .card__title{font-size:19px}
+  .card__title .ar{font-size:12px}
+  .card__desc{font-size:12.5px;min-height:0;margin-top:7px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .card__row{margin-top:auto;padding-top:12px}
+  .card__add{width:38px;height:38px}
+  .view-more{margin:0 14px;padding:15px 26px}
+
+  /* Gallery — keep the variety, shorter rows */
+  .captured-head{margin-bottom:30px}
+  .gallery{grid-template-columns:repeat(2,1fr);grid-auto-rows:130px;gap:10px}
+  .tile__cap{opacity:1;transform:none;font-size:15px;left:12px;right:12px;bottom:10px}
+  .tile::after{opacity:.55}
+  .tile__like{opacity:1;transform:none;width:32px;height:32px}
+
+  /* Reviews */
+  .stars{gap:24px;margin-bottom:36px}
+  .stars__big{font-size:72px}
+  .review{padding:30px 24px}
+  .review__quote{font-size:19px}
+  .dot-btn{width:48px;height:48px}
+
+  /* Visit */
+  .visit__info{padding:34px 24px}
+  .visit__info h3{font-size:30px}
+  .visit__list{margin-top:26px;gap:18px}
+  .visit__socials .soc{flex:1;justify-content:center;padding:15px 14px;min-height:48px}
+  .visit__map{min-height:300px}
+
+  /* Footer */
+  .foot{grid-template-columns:1fr 1fr;gap:34px 24px}
+  .foot__brand{grid-column:1 / -1}
+  .foot__bar{flex-direction:column;gap:8px;text-align:center}
+
+  /* Bigger tap targets everywhere */
+  .btn{min-height:48px}
+  .soc,.nav__cta{min-height:46px}
+}
+
+/* ---- Small phone safety pass ---- */
+@media(max-width:380px){
+  .hero__title{font-size:clamp(38px,12vw,52px)}
+  .hero__meta{font-size:8px;gap:8px}
+  .hero__row .btn{font-size:10px;padding:15px 12px}
+  .card{grid-template-columns:40% 1fr}
+  .gallery{grid-auto-rows:118px}
+  .dock__btn{font-size:9px;letter-spacing:.12em}
+}
+
+/* ---- Touch devices: enable tasteful active states, drop hover-only motion ---- */
+@media (hover:none){
+  .card:active{transform:scale(.99)}
+  .tile:active{transform:scale(.98)}
+  .btn:active,.soc:active,.view-more:active,.sig-arr:active,.dot-btn:active{transform:scale(.95)}
+  .card__add:active{background:var(--burgundy);transform:scale(.92)}
 }
 </style>
 </head>
@@ -917,6 +1084,24 @@ footer::before{content:"LUCIA";position:absolute;font-family:'Playfair Display',
   <svg class="icn" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
 </button>
 
+<!-- ===== Mobile action dock (phones only) ===== -->
+<nav class="dock" id="dock" aria-label="Quick actions">
+  <div class="dock__inner">
+    <a class="dock__btn" href="#menu">
+      <svg viewBox="0 0 24 24" class="icn"><path d="M4 5h16M4 12h16M4 19h10"/></svg>
+      Menu
+    </a>
+    <a class="dock__btn dock__btn--accent" href="https://maps.app.goo.gl/95xdrKPvAyYyVejp6" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" class="icn"><path d="M12 22s8-7.5 8-13a8 8 0 1 0-16 0c0 5.5 8 13 8 13Z"/><circle cx="12" cy="9" r="3"/></svg>
+      Directions
+    </a>
+    <a class="dock__btn" href="https://www.instagram.com/lucia__ksa/" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" class="icn"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor"/></svg>
+      Follow
+    </a>
+  </div>
+</nav>
+
 <script>
 /* =========================================================
    Menu data — sourced from Lucia's HungerStation menu
@@ -1140,7 +1325,7 @@ function buildMenu(cat='all',animate=false){
       card.innerHTML=`
         <div class="card__media">
           ${m.tag?`<span class="card__tag">${m.tag}</span>`:''}
-          <img loading="lazy" src="${m.img}" alt="${m.name}" onerror="mediaFallback(this,'${safeName}')"/>
+          <img loading="lazy" decoding="async" src="${m.img}" alt="${m.name}" onerror="mediaFallback(this,'${safeName}')"/>
           <div class="card__price">${m.price}<small>SR</small></div>
         </div>
         <div class="card__body">
@@ -1256,7 +1441,7 @@ buildMenu('all');
 const gallery=document.getElementById('gallery');
 gallery.querySelectorAll('.tile').forEach((tile,i)=>{
   const img=document.createElement('img');
-  img.loading='lazy';img.alt=tile.dataset.cap||'';img.src=tile.dataset.img;
+  img.loading='lazy';img.decoding='async';img.alt=tile.dataset.cap||'';img.src=tile.dataset.img;
   img.onerror=()=>mediaFallback(img,tile.dataset.cap||'Lucia');
   tile.appendChild(img);
   const cap=document.createElement('div');cap.className='tile__cap';cap.textContent=tile.dataset.cap||'';
